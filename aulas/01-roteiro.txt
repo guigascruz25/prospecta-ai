@@ -1,17 +1,17 @@
 AULA 1 — Instalando o sistema
 Duração: 6–8 min
-Resultado: Extrair o ZIP, instalar, abrir o painel e conectar o MCP sem enviar mensagens.
+Resultado: O assistente instala, inicia e abre o painel; o parceiro acompanha e aprova somente o necessário.
 
 ABERTURA
-Nesta aula vamos extrair o ZIP, instalar, abrir o painel e conectar o MCP sem enviar mensagens.
+Nesta aula vamos o assistente instala, inicia e abre o painel; o parceiro acompanha e aprova somente o necessário.
 
 GRAVAÇÃO DE TELA
-1. Mostre o ZIP e extraia para uma pasta permanente, fora de outra instalação.
-2. Confira Node.js 24.x e Google Chrome. Abra Instalar.cmd. Não execute dentro do ZIP.
-3. Mostre os arquivos de exemplo sendo copiados sem substituir configurações existentes.
-4. Abra Iniciar.cmd e o painel em http://127.0.0.1:3100. A instalação nova está em simulação e pausada.
-5. No Codex ou Claude Code, abra a pasta extraída e use o prompt abaixo. No Claude Desktop, instale primeiro pelo .cmd e mescle o fragmento MCP em suas configurações.
-6. Rode Diagnosticar.cmd e mostre MCP conectado, worker online e nenhuma mensagem real.
+1. Mostre o ZIP, extraia para uma pasta permanente e abra a pasta no Codex ou Claude com execução local.
+2. Cole PROMPT-MESTRE.txt para a configuração completa, ou o prompt desta aula para executar somente a instalação.
+3. Mostre o assistente verificando ferramentas e conduzindo a conexão oficial do navegador se faltar; o parceiro aprova o acesso.
+4. O assistente confere Node/Chrome, executa o diagnóstico e --bootstrap, instala e inicia a cópia local.
+5. Mostre o próprio assistente abrindo o painel e lendo um controle visível; terminal com HTTP 200 não comprova controle de tela.
+6. Confira MCP/worker e simulação pausada. Mostre a retomada depois de uma interação do parceiro, sem repetir todos os passos.
 
 EXERCÍCIO
 Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.

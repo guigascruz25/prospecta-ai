@@ -4,12 +4,13 @@ import { config } from 'dotenv';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
+import { inspectInstallation } from './partner-onboarding.mjs';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
 config({path:resolve(root,'.env'),quiet:true});
 const port=z.coerce.number().int().min(1).max(65535).parse(process.env.APP_PORT||3100);
 const origin=`http://127.0.0.1:${port}`;
-const server=new McpServer({name:'prospecta-ai',version:'1.0.0'});
+const server=new McpServer({name:'prospecta-ai',version:'1.1.0'});
 async function request(path,action) {
   const response=await fetch(`${origin}${path}`,action?{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify(action),signal:AbortSignal.timeout(10000)}:{signal:AbortSignal.timeout(10000)});
   const value=await response.json();
@@ -20,6 +21,7 @@ function result(value) {return {content:[{type:'text',text:JSON.stringify(value)
 function guard(handler) {return async args=>{try{return result(await handler(args));}catch(error){return {isError:true,content:[{type:'text',text:error instanceof Error?error.message.replace(/sk-[A-Za-z0-9_-]+/g,'[segredo oculto]'):'Painel local indisponível.'}]};}};}
 const readOnly={readOnlyHint:true,destructiveHint:false,openWorldHint:false};
 const localWrite={readOnlyHint:false,destructiveHint:false,openWorldHint:false};
+server.registerTool('get_setup_plan',{title:'Diagnosticar configuração assistida',description:'Read local installation checks without exposing credentials. Browser control and external API validation require separate observed checks. Does not create external apps, start services or send messages. Follow CONFIGURACAO-ASSISTIDA.txt for assisted setup.',inputSchema:{},annotations:readOnly},guard(async()=>inspectInstallation(root)));
 server.registerTool('get_status',{title:'Diagnóstico do Prospecta AI',description:'Read local mode, pause state, worker health, integration readiness and costs. Does not expose credentials.',inputSchema:{},annotations:readOnly},guard(async()=>{const value=await request('/api/status');return {mode:value.mode,paused:value.paused,pauseReason:value.pauseReason,workerOnline:value.workerOnline,browserConnected:value.browserConnected,readiness:value.readiness,instagramInbound:value.instagramInbound,capture:value.capture,followUps:value.followUps,limits:value.limits,cost:value.cost,budget:value.budget,realLeads:value.leads.filter(lead=>lead.mode==='live'&&lead.purpose!=='pilot').length,testLeads:value.leads.filter(lead=>lead.mode==='live'&&lead.purpose==='pilot').length,pendingJobs:value.jobs.filter(job=>job.status==='pending').length,exceptions:value.exceptions};}));
 server.registerTool('list_leads',{title:'Listar leads',description:'List local CRM leads. Filter simulation and real leads explicitly.',inputSchema:{mode:z.enum(['live','simulation']).default('live'),funnel:z.enum(['customer','affiliate']).optional(),limit:z.number().int().min(1).max(100).default(30)},annotations:readOnly},guard(async args=>{const value=await request('/api/status');return value.leads.filter(lead=>lead.mode===args.mode&&(!args.funnel||lead.funnel===args.funnel)).slice(0,args.limit);}));
 server.registerTool('get_lead_timeline',{title:'Consultar conversa e histórico',description:'Read a lead and its recent messages and events already available in the local dashboard.',inputSchema:{id:z.string().uuid()},annotations:readOnly},guard(async args=>{const value=await request('/api/status');const lead=value.leads.find(lead=>lead.id===args.id);if(!lead)throw new Error('Lead não encontrado.');return {lead,source:value.capture.sources.find(source=>source.lead_id===args.id)||null,messages:value.messages.filter(message=>message.lead_id===args.id),events:value.events.filter(event=>event.lead_id===args.id)};}));

@@ -1,0 +1,55 @@
+PROSPECTA AI 1.1 — PROCEDIMENTO DO ASSISTENTE INSTALADOR
+
+OBJETIVO
+O parceiro abre a pasta no assistente e cola PROMPT-MESTRE.txt. O assistente executa instalação, navegação e configuração; o parceiro fornece informações ausentes, senhas/códigos e aprovações. Este arquivo orienta um agente que já tenha ferramentas. Não concede controle de tela a um cliente que não o ofereça e não altera suas políticas.
+
+0. CONFIRMAR AS FERRAMENTAS ANTES DE PROMETER
+Identifique o cliente e as ferramentas disponíveis nesta sessão: arquivos/terminal local, busca de documentação e navegador/computador. Declare o que existe e o que falta. Confirme controle abrindo o painel pelo navegador e lendo um título ou controle visível. Abrir uma URL pelo terminal, ter Chrome instalado ou conseguir consultar get_status não comprovam controle de tela.
+Codex desktop: habilite os recursos oficiais Browser/Computer Use/Chrome conforme o alvo. Para serviços com sessão existente, conecte o perfil correto do Chrome. Se o recurso faltar, abra sua configuração/instalação oficial quando suas ferramentas permitirem; o parceiro concede a permissão e conecta o perfil. Não copie permissões de outro usuário nem edite políticas para liberar tudo.
+Claude Code: use a integração oficial Chrome disponível no cliente, como /chrome ou claude --chrome, e a extensão oficial quando necessária. O projeto não pode ligar essa permissão por conta própria. No Claude Desktop, confirme se a sessão oferece execução local e navegador; um chat com apenas MCP do CRM não ganha terminal ou controle de tela. Confirme os recursos realmente disponíveis, sem supor que todas as edições do Claude funcionam igual.
+Se for preciso reconectar/reiniciar o cliente, registre o ponto e retome após o parceiro confirmar. Sem ferramenta de navegador, não substitua a execução prometida por “configuração concluída”. Faça o trabalho local independente e informe o único desbloqueio necessário.
+
+1. INSTALAR OU REUTILIZAR O APLICATIVO LOCAL
+Leia o pacote e verifique SHA256SUMS.txt. Inspecione a pasta: não recrie o projeto, banco ou configurações se já existirem. Node.js 24.x, npm e Chrome vêm de fontes oficiais; instale pelos mecanismos oficiais disponíveis, respeitando as aprovações necessárias. Node ausente impede executar os scripts; resolva isso primeiro com o executor local ou instalador oficial.
+Rode node scripts/partner-onboarding.mjs. Ele só inspeciona arquivos e o serviço local, sem revelar chaves. Se houver outro serviço ou identidade de instalação desconhecida na porta, não o encerre. Identifique a situação e escolha uma porta livre para esta nova instalação, preservando a anterior.
+Rode node scripts/partner-onboarding.mjs --bootstrap. Ele verifica e instala uma cópia nova, inicia painel/worker e executa o diagnóstico; numa cópia pronta, reutiliza sem reinstalar, reiniciar nem retomar a fila. Um painel aberto não confirma permissões externas.
+Conecte o MCP local nos arquivos gerados; preserve outros servidores e use os fragmentos mcp/ para mesclar quando necessário. Consulte get_setup_plan e get_status. Abra o painel com o navegador controlado e confira a marca, o estado e a porta. A pasta do pacote deve ficar num local permanente.
+
+2. COLETAR DADOS UMA VEZ E CONFIGURAR A PERSONA
+Use a identidade deste parceiro, nunca a do fornecedor. Aproveite o que o parceiro já informou e confirme apenas lacunas: empresa, responsável, solução, @, região, público, diferenciais verdadeiros, WhatsApp, formatos/duração da apresentação, modo assistido/autônomo e CRM interno/Vendus. Agrupe a coleta em um bloco curto. Não peça dados que a conta já mostre e que possam ser confirmados.
+Preencha Meu negócio pelo MCP configure_business ou pelo formulário. Verifique o perfil salvo. Não invente email, empresa legal, endereço, termos comerciais, faturamento, promessas ou documentação de negócio. Informações exigidas pela Meta que ainda faltarem precisam vir do titular.
+
+3. NAVEGAR E CRIAR/CONFIGURAR O APP META QUANDO FALTAR
+Abra o portal oficial Meta for Developers com o navegador controlado. Verifique a conta e a empresa selecionadas. Liste os apps existentes e procure um adequado desta empresa; confira permissões e vínculo antes de reutilizar. Não crie outro só porque não vê um token salvo no .env. Não altere um app de outro projeto.
+Se não houver app adequado e a autorização do parceiro cobrir sua criação, preencha o fluxo atual usando o nome Prospecta AI — empresa do parceiro e os dados reais. Escolha o caso de uso Instagram/mensagens compatível com as funções do sistema e as opções que a tela realmente oferecer. Consulte documentação atual se a interface divergir. Não afirme que existe um botão ou permissão que não observou.
+Configure os produtos/casos de uso, vincule a conta Instagram certa, prepare os papéis de teste e solicite somente o acesso necessário. Ações que criam credenciais ou ampliam acesso exigem as aprovações do cliente/serviço no momento correto. Se a plataforma exigir cadastro de desenvolvedor, termos, verificação de empresa ou análise de app, prepare tudo o que puder e registre a etapa que depende do titular ou da Meta. Não prometa aprovar a própria análise da Meta.
+Abra Conectar-Instagram.cmd para o Chrome dedicado do worker. O login em outro perfil não autentica essa janela. Conecte sua ferramenta de controle ao perfil dedicado quando o cliente permitir; se faltar permissão nesse perfil, conduza o parceiro a concedê-la. O parceiro digita login/2FA na página. Confira o @ visualmente e pela API, sem confundir CDP conectado com identidade validada.
+Obtenha o token pelo fluxo oficial autorizado e guarde-o somente no .env local, sem colá-lo no chat, logs ou screenshots. Se sua ferramenta não permitir tratar o segredo com segurança, deixe a tela aberta e peça ao parceiro para inseri-lo no campo/arquivo local apropriado; não invente um mecanismo de transferência oculta. Salve a versão Graph vigente e os IDs obtidos. Prefira o polling existente quando compatível; não substitua o webhook de outro CRM.
+Execute node --import tsx scripts/check-instagram.ts quando a conta estiver pronta. Esse teste lê a API; ele não envia mensagem. Verifique identidade e leitura. Mantenha falhas de permissão explícitas, sem contornar bloqueios.
+
+4. CONFIGURAR A IA ESCOLHIDA
+Assistida: o modelo e a pesquisa são os do assistente disponível nesta sessão. O MCP conecta o CRM; não fornece modelo nem inicia o worker autônomo sem OpenAI. Não crie projeto/chave ou custo de API se o parceiro escolheu começar sem ela.
+Autônoma: use o conector oficial OpenAI Platform se estiver disponível e autorizado; caso contrário, abra o painel oficial no navegador controlado. Confira conta/organização/projeto, reutilize o projeto correto ou crie o projeto próprio autorizado. Prepare a chave mínima para as APIs usadas. O titular aprova permissões e custos; cartão, cobrança e ações financeiras ficam com ele. Configure a chave localmente sem expor o valor, IDs de modelos compatíveis, preços atuais e orçamento combinado. O teto local não substitui limites da conta OpenAI.
+Execute node --import tsx scripts/check-openai.ts para um teste mínimo apenas com custo autorizado. Verifique o resultado real; ter uma chave no arquivo não comprova validade. Não registre nem reutilize credenciais de login do Claude/Codex como se fossem uma chave de API.
+
+5. CONFIGURAR O CRM, COPIES E RETORNOS
+CRM interno: configure e verifique no painel. Vendus: abra app.vendus.com.br na conta do parceiro, examine integrações/webhooks existentes e crie a integração própria quando escolhida e autorizada. Faça o mapeamento e a prévia descritos em INTEGRACAO-VENDUS.txt. Configure as ações remotas para pesquisa, sem automações de mensagem; flags no payload não controlam automações do Vendus. Faça um teste de um registro autorizado e confira seu conteúdo no CRM antes de ampliar. Não toque em webhooks de outros sistemas.
+Prepare abertura e três follow-ups para a persona, mostre os textos e grave a escolha em OPENING_TEMPLATE/FOLLOW_UP_TEMPLATES. Confira a prévia renderizada. Preserve mensagens já enviadas e aberturas específicas já aprovadas na fila. A cadência para em qualquer resposta/recusa e respeita os bloqueios do Instagram.
+
+6. PILOTO, EVIDÊNCIA E ENTREGA
+Peça o destinatário de uma segunda conta que aceitou participar e apresente o texto do piloto. Não envie para empresas sem autorização específica. Depois do piloto autorizado, confirme mensagem enviada, resposta recebida, continuidade correta e ausência de duplicação. Se não puder confirmar, registre o resultado como pendente/incerto e não repita às cegas.
+Execute o diagnóstico local e separe: instalado; navegador controlado; persona salva; conta/app Meta identificados; credenciais configuradas; API validada; piloto confirmado; CRM validado; operação autorizada. Não chame tudo de “pronto” com base apenas no indicador de configuração.
+Mantenha os envios desativados em uma instalação nova até o piloto e a liberação da campanha. Em uma instalação existente, pause de forma coordenada antes de trocar credenciais e preserve o estado comercial; não transforme a retomada do instalador em retomada de disparos.
+Entregue a URL local e um resumo curto do que passou e do que depende de ação externa. A ativação comercial vem após autorização sobre contatos, textos e limites; não repita perguntas já respondidas.
+
+RETOMADA APÓS SENHA/PERMISSÃO
+Registre data/setup-progress.json com etapa, status (em_andamento/aguardando_usuario/aguardando_plataforma/verificado), evidência resumida sem segredos, recurso reutilizado/criado e próxima ação. IDs de recursos podem ficar localmente; nunca salve tokens, senhas, códigos, HTML de credenciais ou URLs com segredo. Registre uma conta/recurso apenas se foi observado. O registro é memória do trabalho, não prova de aprovação nem autorização de disparo.
+Antes da pausa, deixe a tela no ponto exato e peça só a interação que falta. Após o parceiro responder, leia novamente a tela, confirme a conclusão e retome. Não espere por tempo presumindo que a aprovação aconteceu. Continue outras tarefas independentes quando isso não conflitar com a tela do usuário. Se faltar permissão ou uma análise externa ainda estiver pendente, explique o impedimento concreto.
+
+FONTES OFICIAIS CONSULTADAS EM 20/10/2026
+Codex/Computer Use: https://learn.chatgpt.com/docs/computer-use
+Codex/Chrome: https://learn.chatgpt.com/docs/chrome-extension
+Claude Code/Chrome: https://code.claude.com/docs/en/chrome
+Meta/Instagram: https://developers.facebook.com/docs/instagram-platform/
+OpenAI/API: https://platform.openai.com/
+As capacidades variam por cliente, conta, região e políticas. Verifique as ferramentas reais antes de prometer execução visual.

@@ -1,25 +1,25 @@
 Prospecta AI — da instalação à primeira reunião
 Edição parceiros · Windows · 20/10/2026
 
-Uma instalação por parceiro, com banco, persona e contas próprios. Comece em simulação. A IA do Claude/Codex pode conduzir pesquisa e preparação de leads durante uma sessão; o worker autônomo desta edição usa OpenAI e Instagram configurados pelo parceiro.
+O parceiro abre a pasta e cola o prompt mestre. O assistente instala, abre as páginas, reutiliza ou cria os recursos autorizados e configura as integrações. O parceiro fornece dados, senhas/códigos e aprovações. A sessão precisa de execução local e controle de navegador; o procedimento verifica isso antes de prometer execução visual.
 
 ANTES DE GRAVAR
 Use uma instalação de demonstração e persona fictícia. Oculte chaves, tokens, contatos privados e conversas reais. Não grave o próprio login ou 2FA. Mostre a diferença entre simulação, pesquisa e envio confirmado.
 
 AULA 1 — Instalando o sistema
 Duração: 6–8 min
-Resultado: Extrair o ZIP, instalar, abrir o painel e conectar o MCP sem enviar mensagens.
+Resultado: O assistente instala, inicia e abre o painel; o parceiro acompanha e aprova somente o necessário.
 
 ABERTURA
-Nesta aula vamos extrair o ZIP, instalar, abrir o painel e conectar o MCP sem enviar mensagens.
+Nesta aula vamos o assistente instala, inicia e abre o painel; o parceiro acompanha e aprova somente o necessário.
 
 GRAVAÇÃO DE TELA
-1. Mostre o ZIP e extraia para uma pasta permanente, fora de outra instalação.
-2. Confira Node.js 24.x e Google Chrome. Abra Instalar.cmd. Não execute dentro do ZIP.
-3. Mostre os arquivos de exemplo sendo copiados sem substituir configurações existentes.
-4. Abra Iniciar.cmd e o painel em http://127.0.0.1:3100. A instalação nova está em simulação e pausada.
-5. No Codex ou Claude Code, abra a pasta extraída e use o prompt abaixo. No Claude Desktop, instale primeiro pelo .cmd e mescle o fragmento MCP em suas configurações.
-6. Rode Diagnosticar.cmd e mostre MCP conectado, worker online e nenhuma mensagem real.
+1. Mostre o ZIP, extraia para uma pasta permanente e abra a pasta no Codex ou Claude com execução local.
+2. Cole PROMPT-MESTRE.txt para a configuração completa, ou o prompt desta aula para executar somente a instalação.
+3. Mostre o assistente verificando ferramentas e conduzindo a conexão oficial do navegador se faltar; o parceiro aprova o acesso.
+4. O assistente confere Node/Chrome, executa o diagnóstico e --bootstrap, instala e inicia a cópia local.
+5. Mostre o próprio assistente abrindo o painel e lendo um controle visível; terminal com HTTP 200 não comprova controle de tela.
+6. Confira MCP/worker e simulação pausada. Mostre a retomada depois de uma interação do parceiro, sem repetir todos os passos.
 
 EXERCÍCIO
 Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
@@ -49,18 +49,18 @@ Mostre o resultado na tela e diga o que ainda depende de configuração. Não ap
 
 AULA 3 — Configurando o Instagram
 Duração: 7–10 min
-Resultado: Conferir a conta correta, o navegador dedicado e a API de mensagens antes do teste.
+Resultado: O assistente encontra ou cria o app Meta e configura a conta Instagram; o parceiro faz login e aprova acessos.
 
 ABERTURA
-Nesta aula vamos conferir a conta correta, o navegador dedicado e a API de mensagens antes do teste.
+Nesta aula vamos o assistente encontra ou cria o app Meta e configura a conta Instagram; o parceiro faz login e aprova acessos.
 
 GRAVAÇÃO DE TELA
-1. Abra Conectar-Instagram.cmd e faça login na janela dedicada; senha e 2FA ficam somente no Instagram.
-2. Confira que o @ corresponde ao negócio configurado.
-3. Explique a diferença entre a interface do navegador e a API oficial que lê e continua conversas gerenciadas.
-4. Mostre onde ficam os campos Instagram no .env, com valores ocultos.
-5. Faça o diagnóstico de identidade e leitura antes de um teste de conversa com uma conta que aceitou participar.
-6. Ao testar envio, informe destinatário e mensagem. Confira envio persistido, resposta recebida e confirmação. Não reutilize contas de exemplo do fornecedor.
+1. Mostre o assistente abrindo Meta for Developers e conferindo a conta/empresa.
+2. Ele procura um aplicativo adequado existente; se faltar, prepara e cria um app próprio autorizado. Não duplique um app por falta de token local.
+3. O assistente navega no caso de uso Instagram e configura os vínculos/permissões disponíveis. Senha, 2FA, termos e concessões ficam com o parceiro.
+4. Abra a janela dedicada do worker e confirme o @ correto. O login do perfil normal não vale automaticamente para essa janela.
+5. Guarde credenciais somente no .env local, sem valores no vídeo/chat. Verifique identidade e leitura pela API.
+6. Mostre uma interrupção por permissão e a retomada do agente. Diferencie configuração pronta de análise Meta pendente e piloto confirmado.
 
 EXERCÍCIO
 Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.

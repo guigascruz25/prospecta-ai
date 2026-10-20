@@ -1,21 +1,23 @@
-PROSPECTA AI — EDIÇÃO PARCEIROS 1.0.0
+PROSPECTA AI — EDIÇÃO PARCEIROS 1.1.0
 
 COMECE AQUI
 1. Baixe o ZIP da Release e extraia a pasta Prospecta-AI. Não execute dentro do ZIP.
-2. Instale Node.js 24.x com npm pelo site oficial https://nodejs.org/ e Google Chrome pelo site oficial https://www.google.com/chrome/ se ainda não tiver.
-3. Dê dois cliques em Instalar.cmd. Internet é necessária para baixar dependências do registro npm. A primeira instalação pode levar alguns minutos. O instalador usa os binários fornecidos pelas dependências e valida o SQLite em memória; o fluxo foi preparado para Windows com Node.js 24.x, sem exigir compilação de C++ no caso compatível. Se houver incompatibilidade, procure o suporte em vez de instalar compiladores por tentativa.
-4. Abra COMECE-AQUI.html para as oito aulas e prompts. Comece pelo prompt da aula 1 no Codex ou Claude Code com esta pasta aberta.
-5. Abra Iniciar.cmd e http://127.0.0.1:3100. Execute Diagnosticar.cmd. A instalação nova começa em simulação, pausada, sem contas e sem carteira.
-6. Configure SUA persona, SUA conta Instagram e, para autonomia, SUA API OpenAI. Nenhum envio é liberado pelo instalador.
+2. Abra a pasta no Codex local ou Claude com execução local e navegador disponível. Cole PROMPT-MESTRE.txt junto do pacote. O assistente instala, abre as páginas e faz as configurações; você fornece os dados ausentes, digita senhas/códigos nas páginas e aprova os acessos necessários.
+3. O assistente lê CONFIGURACAO-ASSISTIDA.txt, verifica as ferramentas reais e conduz a ativação oficial do navegador se faltar. Conectar só o MCP do CRM não concede controle da tela.
+4. Ele confere Node.js 24.x com npm e Chrome, executa node scripts/partner-onboarding.mjs e --bootstrap, instala/inicia esta cópia e abre o painel para verificar. Downloads necessários vêm de fontes oficiais; a primeira instalação pode levar alguns minutos. A edição Windows compatível valida o SQLite pré-compilado sem exigir C++.
+5. Ele reutiliza ou cria/configura os recursos necessários da SUA conta, incluindo o app Meta quando faltar, e retoma após cada senha/permissão. Verificação de empresa, análise da Meta, termos e custos podem depender do titular/plataforma e não são aprovados pelo instalador.
+6. A instalação nova começa em simulação, pausada, sem contas e sem carteira. O assistente configura SUA persona, Instagram e modo de IA escolhido. Nenhum disparo comercial é autorizado pelo instalador. COMECE-AQUI.html também contém as oito microaulas com prompts por etapa.
+Alternativa manual: Node.js 24.x oficial → Instalar.cmd → Iniciar.cmd → Diagnosticar.cmd → http://127.0.0.1:3100. Use essa alternativa se preferir operar os comandos. Ela não é necessária quando o assistente dispõe de execução local.
 
 O QUE O DOWNLOAD CONTÉM
-Código-fonte, dependências fixadas no lockfile, instalador, diagnóstico, integração MCP, CRM interno, pesquisa automática por API, fila persistente, três follow-ups e material das aulas. O Node, o Chrome, as dependências e as contas de serviços não vêm embutidos.
+Código-fonte, dependências fixadas no lockfile, instalador, bootstrap assistido, diagnóstico, prompt mestre, procedimento de configuração visual, integração MCP, CRM interno, pesquisa automática por API, fila persistente, três follow-ups e material das aulas. O Node, o Chrome, as dependências e as contas de serviços não vêm embutidos. O procedimento é executado pelo agente do parceiro; não é um robô de cadastro Meta embutido no worker.
 
 O QUE NÃO VEM NO DOWNLOAD
 Não inclui .env configurado, chaves, tokens, cookies, sessão de Instagram, banco de leads, histórico comercial, backups, logs, screenshots ou pesquisa real do fornecedor. Exemplos de teste são fictícios e ficam separados do CRM.
 
 COMPATIBILIDADE
-Instalador e atalhos preparados para Windows 10/11 e Node.js 24.x. Codex local ou Claude Code com acesso à pasta podem instalar, configurar e operar. O Claude Desktop tradicional pode usar o MCP depois da instalação pelo .cmd; ele não recebe acesso ao terminal ou a arquivos só por conectar este MCP. Claude no navegador sem executor local não instala nem executa este aplicativo. macOS/Linux: o código e o MCP são portáveis, mas os atalhos e o fluxo de navegador desta edição têm foco Windows e não foram homologados nesses sistemas.
+Instalador e atalhos preparados para Windows 10/11 e Node.js 24.x. Para o assistente fazer tudo, a sessão precisa de acesso local a arquivos/terminal e ferramentas de navegador/computador. Codex desktop e Claude Code/experiências Claude com esses recursos conectados podem conduzir o fluxo. Um chat Claude Desktop que tenha só o MCP do CRM não recebe terminal ou controle de tela por esse motivo. Claude no navegador sem executor local não instala nem executa este aplicativo. macOS/Linux: o código e o MCP são portáveis, mas os atalhos e o fluxo de navegador desta edição têm foco Windows e não foram homologados nesses sistemas.
+Codex: conecte o recurso oficial Browser/Computer Use/Chrome conforme o alvo e aprove o perfil necessário. Claude Code: use /chrome ou claude --chrome e conclua a integração oficial do navegador. O assistente conduz esse preparo quando as ferramentas permitem; permissões do cliente ficam com o usuário. Não há promessa de controle de tela em qualquer cliente/assinatura. Confirme abrindo a página e lendo um elemento com a ferramenta real.
 
 COMO CONECTAR O MCP
 O instalador gera .codex/config.toml para o projeto Codex e .mcp.json para o Claude Code. Abra a pasta como projeto confiável e reinicie/reconecte os servidores MCP conforme a interface do assistente. Se já existirem arquivos, eles são preservados: os fragmentos atualizados ficam em mcp/.
@@ -35,7 +37,7 @@ Aberturas específicas já aprovadas dentro de um job preservam seu texto. Revis
 
 PESQUISA E CRM
 Pesquise fontes públicas, registre contexto e indique lacunas. Não estime faturamento por avaliações ou seguidores. O CRM interno exige um @ de Instagram; empresas só com telefone ficam no arquivo de pesquisa ou no CRM externo, sem inventar perfil.
-Os 14 comandos MCP: get_status, list_leads, get_lead_timeline, pause_operation, resume_operation, add_lead, queue_first_contact, block_lead, request_capture, configure_capture, get_business, configure_business, configure_follow_ups, record_sales_note.
+Os 15 comandos MCP: get_setup_plan, get_status, list_leads, get_lead_timeline, pause_operation, resume_operation, add_lead, queue_first_contact, block_lead, request_capture, configure_capture, get_business, configure_business, configure_follow_ups, record_sales_note. get_setup_plan verifica a instalação local sem expor credenciais; presença de token, navegador instalado e serviço online não comprovam conta validada ou controle de tela.
 O CRM interno funciona sem Vendus. O exportador opcional é descrito em INTEGRACAO-VENDUS.txt. Ele não faz sincronização bidirecional e não transfere o controle das conversas automaticamente.
 
 LIGAÇÕES E REUNIÕES
@@ -55,6 +57,9 @@ SUPORTE
 Envie versão da Release, versão do Node, etapa e mensagem de erro, com segredos removidos. Diagnosticar.cmd não imprime chaves ou tokens. Não compartilhe .env, .chrome-profile, banco, logs completos nem screenshots de conversas como se fossem arquivos de suporte genéricos.
 
 FONTES CONSULTADAS EM 20/10/2026
+Controle Codex: https://learn.chatgpt.com/docs/computer-use
+Chrome Codex: https://learn.chatgpt.com/docs/chrome-extension
+Chrome Claude Code: https://code.claude.com/docs/en/chrome
 Codex MCP: https://developers.openai.com/codex/mcp
 Claude Code MCP: https://code.claude.com/docs/en/mcp
 Claude Desktop versus Code: https://code.claude.com/docs/en/desktop
