@@ -1,0 +1,19 @@
+AULA 4 — Escolhendo IA assistida por MCP ou OpenAI autônoma
+Duração: 6–8 min
+Resultado: Entender onde a inteligência roda e pesquisar sem confundir assinatura com API.
+
+ABERTURA
+Nesta aula vamos entender onde a inteligência roda e pesquisar sem confundir assinatura com API.
+
+GRAVAÇÃO DE TELA
+1. Desenhe o fluxo: pessoa → Claude/Codex → MCP → CRM local.
+2. Pesquise algumas empresas com as ferramentas de busca/navegador disponíveis no assistente e registre via add_lead, sem contato.
+3. Explique que request_capture solicita a busca paga do worker, e não a busca do Claude/Codex.
+4. Mostre o segundo fluxo: worker → OpenAI/API de pesquisa → Instagram, com o computador ligado.
+5. Para autonomia, configure a chave da conta do parceiro, modelo compatível e preços atuais. Faça um teste pequeno dentro do orçamento.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.

@@ -1,0 +1,20 @@
+AULA 1 — Instalando o sistema
+Duração: 6–8 min
+Resultado: Extrair o ZIP, instalar, abrir o painel e conectar o MCP sem enviar mensagens.
+
+ABERTURA
+Nesta aula vamos extrair o ZIP, instalar, abrir o painel e conectar o MCP sem enviar mensagens.
+
+GRAVAÇÃO DE TELA
+1. Mostre o ZIP e extraia para uma pasta permanente, fora de outra instalação.
+2. Confira Node.js 24.x e Google Chrome. Abra Instalar.cmd. Não execute dentro do ZIP.
+3. Mostre os arquivos de exemplo sendo copiados sem substituir configurações existentes.
+4. Abra Iniciar.cmd e o painel em http://127.0.0.1:3100. A instalação nova está em simulação e pausada.
+5. No Codex ou Claude Code, abra a pasta extraída e use o prompt abaixo. No Claude Desktop, instale primeiro pelo .cmd e mescle o fragmento MCP em suas configurações.
+6. Rode Diagnosticar.cmd e mostre MCP conectado, worker online e nenhuma mensagem real.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.

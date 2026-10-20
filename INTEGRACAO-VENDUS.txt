@@ -1,0 +1,20 @@
+PROSPECTA AI + VENDUS — EXPORTAÇÃO DE PESQUISA
+
+Esta integração envia dossiês pelo webhook da conta do parceiro. Não usa o webhook do fornecedor. O CRM interno pode ser usado sozinho.
+
+1. Produza uma lista JSON com o formato de exemplos/pesquisa.json. Substitua dados fictícios pelos fatos observados. IDs devem ser estáveis e incluir lote/região, para não colidir com outra pesquisa. A lista aceita até 500 empresas por execução.
+2. Gere a prévia, sem enviar:
+   node scripts/partner-webhook.mjs data/minha-pesquisa.json
+   Abra data/webhook-export/preview.json e revise o conteúdo.
+3. No SEU Vendus, crie um webhook e revise suas ações. Para pesquisa: criar/atualizar lead, dossiê a partir de notes e etiqueta; sem squad, mensagens nem cadência. Flags auto_contact=false e allow_contact=false não controlam essas ações remotas.
+4. Mapeie name/company/phone/email/instagram/city e notes; mantenha external_id para reconciliação. O suporte a upsert por external_id depende da configuração do receptor, não é garantido pelo exportador.
+5. Salve somente no .env:
+   VENDUS_WEBHOOK_URL=https://app.vendus.com.br/functions/v1/webhook-receiver/SEU-ID
+   VENDUS_WEBHOOK_RESEARCH_ONLY_CONFIRMED=true
+6. Crie data/teste-vendus.json com exatamente UM lead real revisado, autorize a transmissão ao seu CRM e execute:
+   node scripts/partner-webhook.mjs data/teste-vendus.json --send
+7. Confira o cadastro completo e a ausência de envio automático no Vendus antes de enviar o lote maior.
+
+O comprovante registra hash do corpo, horário, status HTTP e, quando retornado explicitamente, lead_id. http_accepted significa que o servidor respondeu com sucesso HTTP; sozinho, não confirma a criação de um lead ou as ações executadas. crmLeadConfirmed só fica true quando a resposta traz success=true e lead_id. Inspecione também o CRM.
+Um comprovante é escrito ANTES da transmissão. Repetir o comando não retransmite IDs já tentados para o mesmo destino, inclusive em estado unknown. Resultados incertos exigem reconciliação no CRM; não apague os comprovantes para forçar repetição. Alterar o ID ou trocar a pasta dos comprovantes pode gerar duplicidade.
+Notas comerciais registradas depois da importação e respostas recebidas não são sincronizadas por este exportador. Disparar WhatsApp pelo Vendus é uma configuração separada da plataforma externa, fora deste pacote.

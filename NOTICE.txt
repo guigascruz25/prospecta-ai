@@ -1,0 +1,5 @@
+Prospecta AI — edição parceiros.
+Implementação local e identidade visual fornecidas para esta distribuição.
+Referência conceitual original: https://github.com/soumatheusgomes/buscandomilhao (especificação). O pacote não redistribui os documentos originais dessa especificação.
+Dependências instaladas pelo npm mantêm suas próprias licenças e avisos.
+Esta entrega não implementa licença comercial, cobrança, multiusuário, telefonia ou hospedagem SaaS.

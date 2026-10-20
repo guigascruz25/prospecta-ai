@@ -1,0 +1,42 @@
+import { fileURLToPath } from 'node:url';
+import { resolve } from 'node:path';
+import { config } from 'dotenv';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { z } from 'zod';
+
+const root=fileURLToPath(new URL('../',import.meta.url));
+config({path:resolve(root,'.env'),quiet:true});
+const port=z.coerce.number().int().min(1).max(65535).parse(process.env.APP_PORT||3100);
+const origin=`http://127.0.0.1:${port}`;
+const server=new McpServer({name:'prospecta-ai',version:'1.0.0'});
+async function request(path,action) {
+  const response=await fetch(`${origin}${path}`,action?{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify(action),signal:AbortSignal.timeout(10000)}:{signal:AbortSignal.timeout(10000)});
+  const value=await response.json();
+  if(!response.ok) throw new Error(typeof value.error==='string'?value.error:'Falha na API local.');
+  return value;
+}
+function result(value) {return {content:[{type:'text',text:JSON.stringify(value)}]};}
+function guard(handler) {return async args=>{try{return result(await handler(args));}catch(error){return {isError:true,content:[{type:'text',text:error instanceof Error?error.message.replace(/sk-[A-Za-z0-9_-]+/g,'[segredo oculto]'):'Painel local indisponível.'}]};}};}
+const readOnly={readOnlyHint:true,destructiveHint:false,openWorldHint:false};
+const localWrite={readOnlyHint:false,destructiveHint:false,openWorldHint:false};
+server.registerTool('get_status',{title:'Diagnóstico do Prospecta AI',description:'Read local mode, pause state, worker health, integration readiness and costs. Does not expose credentials.',inputSchema:{},annotations:readOnly},guard(async()=>{const value=await request('/api/status');return {mode:value.mode,paused:value.paused,pauseReason:value.pauseReason,workerOnline:value.workerOnline,browserConnected:value.browserConnected,readiness:value.readiness,instagramInbound:value.instagramInbound,capture:value.capture,followUps:value.followUps,limits:value.limits,cost:value.cost,budget:value.budget,realLeads:value.leads.filter(lead=>lead.mode==='live'&&lead.purpose!=='pilot').length,testLeads:value.leads.filter(lead=>lead.mode==='live'&&lead.purpose==='pilot').length,pendingJobs:value.jobs.filter(job=>job.status==='pending').length,exceptions:value.exceptions};}));
+server.registerTool('list_leads',{title:'Listar leads',description:'List local CRM leads. Filter simulation and real leads explicitly.',inputSchema:{mode:z.enum(['live','simulation']).default('live'),funnel:z.enum(['customer','affiliate']).optional(),limit:z.number().int().min(1).max(100).default(30)},annotations:readOnly},guard(async args=>{const value=await request('/api/status');return value.leads.filter(lead=>lead.mode===args.mode&&(!args.funnel||lead.funnel===args.funnel)).slice(0,args.limit);}));
+server.registerTool('get_lead_timeline',{title:'Consultar conversa e histórico',description:'Read a lead and its recent messages and events already available in the local dashboard.',inputSchema:{id:z.string().uuid()},annotations:readOnly},guard(async args=>{const value=await request('/api/status');const lead=value.leads.find(lead=>lead.id===args.id);if(!lead)throw new Error('Lead não encontrado.');return {lead,source:value.capture.sources.find(source=>source.lead_id===args.id)||null,messages:value.messages.filter(message=>message.lead_id===args.id),events:value.events.filter(event=>event.lead_id===args.id)};}));
+server.registerTool('pause_operation',{title:'Pausar a fila',description:'Pause future execution of the local Prospecta AI queue.',inputSchema:{},annotations:{...localWrite,idempotentHint:true}},guard(async()=>request('/api/control',{action:'pause'})));
+server.registerTool('resume_operation',{title:'Retomar a fila',description:'Resume the queue only when the dashboard integration gates permit. This can execute queued live messages; use only when the operator requested resumption.',inputSchema:{},annotations:{...localWrite,openWorldHint:true}},guard(async()=>request('/api/control',{action:'resume'})));
+server.registerTool('add_lead',{title:'Cadastrar lead',description:'Register an operator-provided profile. Do not invent monthly revenue. This action does not send messages.',inputSchema:{handle:z.string(),name:z.string(),bio:z.string().default(''),niche:z.string().default(''),city:z.string().default(''),funnel:z.enum(['customer','affiliate']).default('customer'),monthlyRevenue:z.number().nonnegative().nullable().default(null)},annotations:{...localWrite,idempotentHint:true}},guard(async args=>request('/api/control',{action:'addLead',lead:{...args,mode:'live'}})));
+server.registerTool('queue_first_contact',{title:'Agendar primeiro contato',description:'Queue a first Instagram contact for an explicitly operator-selected qualified lead. When the live queue is running this can cause an external message. Existing operational, budget and opt-out gates apply.',inputSchema:{id:z.string().uuid()},annotations:{readOnlyHint:false,destructiveHint:false,openWorldHint:true,idempotentHint:true}},guard(async args=>request('/api/control',{action:'contact',id:args.id})));
+server.registerTool('block_lead',{title:'Não contatar',description:'Permanently suppress a lead and cancel its pending contacts when the operator requested it or an opt-out was received.',inputSchema:{id:z.string().uuid()},annotations:{...localWrite,destructiveHint:true,idempotentHint:true}},guard(async args=>request('/api/control',{action:'block',id:args.id})));
+server.registerTool('request_capture',{title:'Buscar empresas locais',description:'Request one paid web-search discovery round from the worker. Respects pause, business geography, daily lead limit and local budget. Does not bypass verified-profile contact gates.',inputSchema:{},annotations:{...localWrite,openWorldHint:true}},guard(async()=>request('/api/control',{action:'captureNow'})));
+server.registerTool('configure_capture',{title:'Configurar captação',description:'Change discovery and automatic first-contact settings when requested by the operator. Enabling autoContact can enqueue messages to verified local business profiles within daily limits.',inputSchema:{enabled:z.boolean(),autoContact:z.boolean()},annotations:{...localWrite,openWorldHint:true}},guard(async args=>request('/api/control',{action:'captureSettings',...args})));
+server.registerTool('get_business',{title:'Consultar persona e mensagens',description:'Read the configured business identity, audience, verified claims and approved outreach templates. Does not read credentials.',inputSchema:{},annotations:readOnly},guard(async()=>(await request('/api/status')).business));
+server.registerTool('configure_business',{title:'Configurar negócio e mensagens',description:'Apply operator-requested business or approved message changes. Merge with the existing profile. This does not send messages, enable live mode or change credentials. FOLLOW_UP_TEMPLATES must have zero or three messages.',inputSchema:{changes:z.record(z.string(),z.unknown())},annotations:localWrite},guard(async({changes})=>{
+  const business=(await request('/api/status')).business;
+  const allowed=new Set([...Object.keys(business),'OPENING_TEMPLATE','FOLLOW_UP_TEMPLATES']);
+  if(Object.keys(changes).some(key=>!allowed.has(key)))throw new Error('Campo não pertence à configuração do negócio.');
+  return request('/api/control',{action:'business',business:{...business,...changes}});
+}));
+server.registerTool('configure_follow_ups',{title:'Configurar retornos',description:'Enable or pause the three no-response follow-ups when the operator asks. Enabling this in a running live installation can schedule external messages. Replies, opt-outs and Instagram gates remain enforced.',inputSchema:{enabled:z.boolean()},annotations:{...localWrite,openWorldHint:true}},guard(async({enabled})=>request('/api/control',{action:'followUpSettings',enabled})));
+server.registerTool('record_sales_note',{title:'Registrar resultado comercial',description:'Record an operator-provided call result, research summary or meeting preference on an existing lead. Does not place calls, send messages or book a calendar.',inputSchema:{id:z.string().uuid(),text:z.string().min(1).max(3000),nextAction:z.string().max(300).optional()},annotations:localWrite},guard(async args=>request('/api/control',{action:'note',...args})));
+await server.connect(new StdioServerTransport());

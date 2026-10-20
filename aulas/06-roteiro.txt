@@ -1,0 +1,20 @@
+AULA 6 — Treinando abordagem e três follow-ups
+Duração: 7–9 min
+Resultado: Transformar a estratégia comercial em textos aprovados que o sistema realmente utiliza.
+
+ABERTURA
+Nesta aula vamos transformar a estratégia comercial em textos aprovados que o sistema realmente utiliza.
+
+GRAVAÇÃO DE TELA
+1. Explique abertura curta: contexto observado, identidade e pergunta para chegar ao responsável.
+2. Demonstre o diagnóstico antes da oferta e da qualificação financeira.
+3. Crie três retornos com objetivos diferentes: retomar, contextualizar, encerrar com transparência.
+4. Salve OPENING_TEMPLATE e FOLLOW_UP_TEMPLATES em Meu negócio ou pelo MCP.
+5. Mostre as variáveis permitidas e a prévia de uma empresa; não deixe placeholders sem preencher.
+6. Explique que templates novos valem para novos envios; uma abertura específica já aprovada na fila preserva seu próprio texto.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.

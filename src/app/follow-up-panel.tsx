@@ -1,0 +1,9 @@
+'use client';
+import type { Snapshot } from '../lib/view-model';
+import type { Lead } from '../db/schema';
+import { followUpCopy,followUpLabels,previewCopy } from '../lib/outreach';
+
+export function FollowUpPanel({data,lead,busy,act}:{data:Snapshot;lead?:Lead;busy:boolean;act:(payload:Record<string,unknown>,success?:string)=>Promise<void>}) {
+  const next=lead?.followUpNextAt?new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',timeZone:'America/Sao_Paulo'}).format(new Date(lead.followUpNextAt)):'';
+  return <section className="panel capture-context"><div className="panel-heading"><div><span className="eyebrow">SE NÃO HOUVER RESPOSTA</span><h2>Três retornos, três abordagens</h2></div><label><input type="checkbox" checked={data.followUps.enabled} disabled={busy} onChange={event=>void act({action:'followUpSettings',enabled:event.target.checked},event.target.checked?'Follow-ups ativados.':'Follow-ups pausados.')}/> Follow-ups automáticos</label></div><p>24, 48 e 72 horas após a abertura, entre 9h e 20h. A sequência para ao receber qualquer resposta. Atrasos pelo limite diário preservam pelo menos 24 horas entre retornos.</p><div className="capture-context-grid">{[1,2,3].map(step=><div key={step}><small>DIA {step} · {['','RETOMAR O CONTATO','MOSTRAR A APLICAÇÃO','ENCERRAR COM TRANSPARÊNCIA'][step]}</small><p>{previewCopy(()=>followUpCopy(step,data.business,lead?.name))}</p></div>)}</div>{lead&&<p><strong>{lead.name}: {lead.followUpCount}/3 retornos enviados.</strong> {followUpLabels[lead.followUpStatus]||lead.followUpStatus}{next?` · próximo: ${next}`:''}.</p>}<p>Se a solicitação de mensagem ainda não permitir novos envios no Instagram, o impedimento fica registrado. A última tentativa encerra os retornos, sem impedir uma resposta posterior.</p></section>;
+}

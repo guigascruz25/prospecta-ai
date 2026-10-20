@@ -1,0 +1,20 @@
+AULA 8 — Ligando para empresas locais e agendando apresentações
+Duração: 6–8 min
+Resultado: Usar a pesquisa para uma ligação humana consultiva e registrar o próximo passo.
+
+ABERTURA
+Nesta aula vamos usar a pesquisa para uma ligação humana consultiva e registrar o próximo passo.
+
+GRAVAÇÃO DE TELA
+1. Deixe claro: esta edição prepara a ligação; ela não faz chamadas telefônicas por IA.
+2. Abra o dossiê e confirme telefone comercial publicado e nome da empresa.
+3. Monte uma abertura de 20–30 segundos, peça o responsável e faça uma pergunta de diagnóstico.
+4. Demonstre objeções comuns e o convite para uma apresentação breve, sem prometer resultado.
+5. Ofereça online ou presencial e confirme sua disponibilidade antes de marcar.
+6. Registre o resultado e a preferência no CRM interno via record_sales_note ou no Vendus, conforme escolhido.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.

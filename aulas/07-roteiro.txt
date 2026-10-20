@@ -1,0 +1,20 @@
+AULA 7 — Ligando a máquina de prospecção
+Duração: 7–10 min
+Resultado: Sair do teste para um lote controlado, com confirmação real de cada envio.
+
+ABERTURA
+Nesta aula vamos sair do teste para um lote controlado, com confirmação real de cada envio.
+
+GRAVAÇÃO DE TELA
+1. Comece com pesquisa sem contato e mostre o contexto de cinco empresas locais.
+2. Confira @, fonte, cidade, aderência, histórico e lista de não contato.
+3. Mostre o destinatário técnico do piloto e o texto antes de qualquer envio real.
+4. Depois do piloto, escolha o lote e os limites. Explique que cinco é o padrão inicial local, não garantia de segurança nem limite oficial do Instagram.
+5. Libere modo real somente após os diagnósticos; ative abordagens e follow-ups conforme a autorização do parceiro.
+6. Acompanhe na fila a diferença entre pendente, enviado e resultado incerto. Demonstre Pausar fila.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.

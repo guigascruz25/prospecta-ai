@@ -1,0 +1,20 @@
+AULA 5 — CRM interno ou Vendus
+Duração: 6–8 min
+Resultado: Organizar a pesquisa e escolher onde a operação comercial será acompanhada.
+
+ABERTURA
+Nesta aula vamos organizar a pesquisa e escolher onde a operação comercial será acompanhada.
+
+GRAVAÇÃO DE TELA
+1. Mostre um lead no CRM interno e sua conversa, canal, próximo passo e histórico.
+2. Explique que Vendus externo e Prospecta AI são aplicativos distintos.
+3. No Vendus, crie um webhook da conta do parceiro e revise cada ação configurada.
+4. Prepare um arquivo data/minha-pesquisa.json usando o exemplo. Gere o preview sem --send.
+5. Mapeie name, company, phone, email, instagram, city, external_id e notes para o dossiê.
+6. Teste uma empresa apenas e confirme o registro completo no CRM. Flags no JSON não desativam automações remotas.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.

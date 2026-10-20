@@ -1,0 +1,20 @@
+AULA 3 — Configurando o Instagram
+Duração: 7–10 min
+Resultado: Conferir a conta correta, o navegador dedicado e a API de mensagens antes do teste.
+
+ABERTURA
+Nesta aula vamos conferir a conta correta, o navegador dedicado e a API de mensagens antes do teste.
+
+GRAVAÇÃO DE TELA
+1. Abra Conectar-Instagram.cmd e faça login na janela dedicada; senha e 2FA ficam somente no Instagram.
+2. Confira que o @ corresponde ao negócio configurado.
+3. Explique a diferença entre a interface do navegador e a API oficial que lê e continua conversas gerenciadas.
+4. Mostre onde ficam os campos Instagram no .env, com valores ocultos.
+5. Faça o diagnóstico de identidade e leitura antes de um teste de conversa com uma conta que aceitou participar.
+6. Ao testar envio, informe destinatário e mensagem. Confira envio persistido, resposta recebida e confirmação. Não reutilize contas de exemplo do fornecedor.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.

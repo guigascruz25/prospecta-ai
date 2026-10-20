@@ -1,0 +1,19 @@
+AULA 2 — Configurando a persona e a oferta
+Duração: 5–7 min
+Resultado: Separar a marca Prospecta AI da empresa e da solução que o parceiro vende.
+
+ABERTURA
+Nesta aula vamos separar a marca Prospecta AI da empresa e da solução que o parceiro vende.
+
+GRAVAÇÃO DE TELA
+1. Abra Meu negócio: Prospecta AI é a ferramenta; Nome da solução vendida é a oferta do parceiro.
+2. Preencha responsável, empresa, cidade, público, problema resolvido e link de atendimento.
+3. Separe fatos comprovados de promessas que ainda não podem ser usadas.
+4. Defina o que qualifica um lead e se a apresentação será online, presencial ou ambos.
+5. Mostre o perfil salvo pelo MCP e uma abertura de exemplo, sem agendar disparo.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.

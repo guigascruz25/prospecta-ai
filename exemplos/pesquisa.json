@@ -1,0 +1,22 @@
+[
+  {
+    "id": "minha-regiao:lote-001:empresa-001",
+    "name": "Empresa Fictícia — substituir antes de usar",
+    "city": "Sua cidade, UF",
+    "segment": "Seu segmento",
+    "phone": "",
+    "email": "",
+    "instagram": "",
+    "website": "https://example.com",
+    "sourceUrl": "https://example.com",
+    "overview": "Modelo de estrutura, sem informação comercial real.",
+    "observations": [
+      {
+        "fact": "Descrever somente um fato observado.",
+        "sourceUrl": "https://example.com"
+      }
+    ],
+    "opportunity": "Hipótese a validar com o responsável.",
+    "opening": "Rascunho aprovado pelo operador, ainda não enviado."
+  }
+]

@@ -1,0 +1,174 @@
+Prospecta AI — da instalação à primeira reunião
+Edição parceiros · Windows · 20/10/2026
+
+Uma instalação por parceiro, com banco, persona e contas próprios. Comece em simulação. A IA do Claude/Codex pode conduzir pesquisa e preparação de leads durante uma sessão; o worker autônomo desta edição usa OpenAI e Instagram configurados pelo parceiro.
+
+ANTES DE GRAVAR
+Use uma instalação de demonstração e persona fictícia. Oculte chaves, tokens, contatos privados e conversas reais. Não grave o próprio login ou 2FA. Mostre a diferença entre simulação, pesquisa e envio confirmado.
+
+AULA 1 — Instalando o sistema
+Duração: 6–8 min
+Resultado: Extrair o ZIP, instalar, abrir o painel e conectar o MCP sem enviar mensagens.
+
+ABERTURA
+Nesta aula vamos extrair o ZIP, instalar, abrir o painel e conectar o MCP sem enviar mensagens.
+
+GRAVAÇÃO DE TELA
+1. Mostre o ZIP e extraia para uma pasta permanente, fora de outra instalação.
+2. Confira Node.js 24.x e Google Chrome. Abra Instalar.cmd. Não execute dentro do ZIP.
+3. Mostre os arquivos de exemplo sendo copiados sem substituir configurações existentes.
+4. Abra Iniciar.cmd e o painel em http://127.0.0.1:3100. A instalação nova está em simulação e pausada.
+5. No Codex ou Claude Code, abra a pasta extraída e use o prompt abaixo. No Claude Desktop, instale primeiro pelo .cmd e mescle o fragmento MCP em suas configurações.
+6. Rode Diagnosticar.cmd e mostre MCP conectado, worker online e nenhuma mensagem real.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.
+
+AULA 2 — Configurando a persona e a oferta
+Duração: 5–7 min
+Resultado: Separar a marca Prospecta AI da empresa e da solução que o parceiro vende.
+
+ABERTURA
+Nesta aula vamos separar a marca Prospecta AI da empresa e da solução que o parceiro vende.
+
+GRAVAÇÃO DE TELA
+1. Abra Meu negócio: Prospecta AI é a ferramenta; Nome da solução vendida é a oferta do parceiro.
+2. Preencha responsável, empresa, cidade, público, problema resolvido e link de atendimento.
+3. Separe fatos comprovados de promessas que ainda não podem ser usadas.
+4. Defina o que qualifica um lead e se a apresentação será online, presencial ou ambos.
+5. Mostre o perfil salvo pelo MCP e uma abertura de exemplo, sem agendar disparo.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.
+
+AULA 3 — Configurando o Instagram
+Duração: 7–10 min
+Resultado: Conferir a conta correta, o navegador dedicado e a API de mensagens antes do teste.
+
+ABERTURA
+Nesta aula vamos conferir a conta correta, o navegador dedicado e a API de mensagens antes do teste.
+
+GRAVAÇÃO DE TELA
+1. Abra Conectar-Instagram.cmd e faça login na janela dedicada; senha e 2FA ficam somente no Instagram.
+2. Confira que o @ corresponde ao negócio configurado.
+3. Explique a diferença entre a interface do navegador e a API oficial que lê e continua conversas gerenciadas.
+4. Mostre onde ficam os campos Instagram no .env, com valores ocultos.
+5. Faça o diagnóstico de identidade e leitura antes de um teste de conversa com uma conta que aceitou participar.
+6. Ao testar envio, informe destinatário e mensagem. Confira envio persistido, resposta recebida e confirmação. Não reutilize contas de exemplo do fornecedor.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.
+
+AULA 4 — Escolhendo IA assistida por MCP ou OpenAI autônoma
+Duração: 6–8 min
+Resultado: Entender onde a inteligência roda e pesquisar sem confundir assinatura com API.
+
+ABERTURA
+Nesta aula vamos entender onde a inteligência roda e pesquisar sem confundir assinatura com API.
+
+GRAVAÇÃO DE TELA
+1. Desenhe o fluxo: pessoa → Claude/Codex → MCP → CRM local.
+2. Pesquise algumas empresas com as ferramentas de busca/navegador disponíveis no assistente e registre via add_lead, sem contato.
+3. Explique que request_capture solicita a busca paga do worker, e não a busca do Claude/Codex.
+4. Mostre o segundo fluxo: worker → OpenAI/API de pesquisa → Instagram, com o computador ligado.
+5. Para autonomia, configure a chave da conta do parceiro, modelo compatível e preços atuais. Faça um teste pequeno dentro do orçamento.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.
+
+AULA 5 — CRM interno ou Vendus
+Duração: 6–8 min
+Resultado: Organizar a pesquisa e escolher onde a operação comercial será acompanhada.
+
+ABERTURA
+Nesta aula vamos organizar a pesquisa e escolher onde a operação comercial será acompanhada.
+
+GRAVAÇÃO DE TELA
+1. Mostre um lead no CRM interno e sua conversa, canal, próximo passo e histórico.
+2. Explique que Vendus externo e Prospecta AI são aplicativos distintos.
+3. No Vendus, crie um webhook da conta do parceiro e revise cada ação configurada.
+4. Prepare um arquivo data/minha-pesquisa.json usando o exemplo. Gere o preview sem --send.
+5. Mapeie name, company, phone, email, instagram, city, external_id e notes para o dossiê.
+6. Teste uma empresa apenas e confirme o registro completo no CRM. Flags no JSON não desativam automações remotas.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.
+
+AULA 6 — Treinando abordagem e três follow-ups
+Duração: 7–9 min
+Resultado: Transformar a estratégia comercial em textos aprovados que o sistema realmente utiliza.
+
+ABERTURA
+Nesta aula vamos transformar a estratégia comercial em textos aprovados que o sistema realmente utiliza.
+
+GRAVAÇÃO DE TELA
+1. Explique abertura curta: contexto observado, identidade e pergunta para chegar ao responsável.
+2. Demonstre o diagnóstico antes da oferta e da qualificação financeira.
+3. Crie três retornos com objetivos diferentes: retomar, contextualizar, encerrar com transparência.
+4. Salve OPENING_TEMPLATE e FOLLOW_UP_TEMPLATES em Meu negócio ou pelo MCP.
+5. Mostre as variáveis permitidas e a prévia de uma empresa; não deixe placeholders sem preencher.
+6. Explique que templates novos valem para novos envios; uma abertura específica já aprovada na fila preserva seu próprio texto.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.
+
+AULA 7 — Ligando a máquina de prospecção
+Duração: 7–10 min
+Resultado: Sair do teste para um lote controlado, com confirmação real de cada envio.
+
+ABERTURA
+Nesta aula vamos sair do teste para um lote controlado, com confirmação real de cada envio.
+
+GRAVAÇÃO DE TELA
+1. Comece com pesquisa sem contato e mostre o contexto de cinco empresas locais.
+2. Confira @, fonte, cidade, aderência, histórico e lista de não contato.
+3. Mostre o destinatário técnico do piloto e o texto antes de qualquer envio real.
+4. Depois do piloto, escolha o lote e os limites. Explique que cinco é o padrão inicial local, não garantia de segurança nem limite oficial do Instagram.
+5. Libere modo real somente após os diagnósticos; ative abordagens e follow-ups conforme a autorização do parceiro.
+6. Acompanhe na fila a diferença entre pendente, enviado e resultado incerto. Demonstre Pausar fila.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.
+
+AULA 8 — Ligando para empresas locais e agendando apresentações
+Duração: 6–8 min
+Resultado: Usar a pesquisa para uma ligação humana consultiva e registrar o próximo passo.
+
+ABERTURA
+Nesta aula vamos usar a pesquisa para uma ligação humana consultiva e registrar o próximo passo.
+
+GRAVAÇÃO DE TELA
+1. Deixe claro: esta edição prepara a ligação; ela não faz chamadas telefônicas por IA.
+2. Abra o dossiê e confirme telefone comercial publicado e nome da empresa.
+3. Monte uma abertura de 20–30 segundos, peça o responsável e faça uma pergunta de diagnóstico.
+4. Demonstre objeções comuns e o convite para uma apresentação breve, sem prometer resultado.
+5. Ofereça online ou presencial e confirme sua disponibilidade antes de marcar.
+6. Registre o resultado e a preferência no CRM interno via record_sales_note ou no Vendus, conforme escolhido.
+
+EXERCÍCIO
+Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
+
+FECHAMENTO
+Mostre o resultado na tela e diga o que ainda depende de configuração. Não apresente preparação como execução.
+
