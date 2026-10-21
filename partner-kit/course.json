@@ -1,6 +1,6 @@
 {
   "title": "Prospecta AI — da instalação à primeira reunião",
-  "edition": "Edição parceiros · Windows · 20/10/2026",
+  "edition": "Edição parceiros · Windows · versão 1.2 · 21/10/2026",
   "intro": "O parceiro abre a pasta e cola o prompt mestre. O assistente instala, abre as páginas, reutiliza ou cria os recursos autorizados e configura as integrações. O parceiro fornece dados, senhas/códigos e aprovações. A sessão precisa de execução local e controle de navegador; o procedimento verifica isso antes de prometer execução visual.",
   "lessons": [
     {
@@ -14,7 +14,8 @@
         "Mostre o assistente verificando ferramentas e conduzindo a conexão oficial do navegador se faltar; o parceiro aprova o acesso.",
         "O assistente confere Node/Chrome, executa o diagnóstico e --bootstrap, instala e inicia a cópia local.",
         "Mostre o próprio assistente abrindo o painel e lendo um controle visível; terminal com HTTP 200 não comprova controle de tela.",
-        "Confira MCP/worker e simulação pausada. Mostre a retomada depois de uma interação do parceiro, sem repetir todos os passos."
+        "Confira MCP/worker e simulação pausada. Mostre a retomada depois de uma interação do parceiro, sem repetir todos os passos.",
+        "Apresente Atualizações: conexão própria ao GitHub privado, notas da Release, botão com backup e recuperação por Atualizar.cmd. Consulte ATUALIZACOES.txt."
       ],
       "prompt": "Instale e abra o Prospecta AI para mim, executando o trabalho na pasta extraída que abri. Leia CONFIGURACAO-ASSISTIDA.txt e execute as etapas 0 e 1. Verifique execução local e ferramenta real de navegador/computador; se faltar, conduza a conexão oficial e aguarde apenas a permissão necessária. Não presuma que MCP do CRM concede controle de tela. Confira Node.js 24.x, npm e Chrome de fontes oficiais. Execute node scripts/partner-onboarding.mjs e, conforme o diagnóstico, node scripts/partner-onboarding.mjs --bootstrap. Preserve configurações, banco e servidores MCP existentes. Não encerre outro aplicativo na porta. Abra o painel com sua ferramenta de navegador, leia um título ou controle para comprovar que consegue operá-lo e confira get_setup_plan/get_status. Eu digito senhas e aprovo permissões quando necessário; você faz os demais cliques e retoma depois da minha confirmação. Registre o progresso sem segredos. Não configure contas externas nem envie mensagens nesta aula. Para a configuração completa, seguiremos PROMPT-MESTRE.txt. Entregue URL, estado do worker e prova do controle do painel, ou o impedimento concreto."
     },

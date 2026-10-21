@@ -1,4 +1,4 @@
-PROSPECTA AI — EDIÇÃO PARCEIROS 1.1.0
+PROSPECTA AI — EDIÇÃO PARCEIROS 1.2.0
 
 COMECE AQUI
 1. Baixe o ZIP da Release e extraia a pasta Prospecta-AI. Não execute dentro do ZIP.
@@ -51,7 +51,7 @@ Se a porta estiver ocupada, não feche outro aplicativo: escolha outra APP_PORT 
 
 ATUALIZAÇÕES E BACKUPS
 Guarde seu .env, config/business.json, banco e perfil Chrome em local privado. Backups SQLite ficam em backups/; não contêm credenciais nem perfil do navegador.
-Para atualizar: pause, espere as tarefas terminarem, faça backup, pare esta instalação, extraia a próxima versão em OUTRA pasta e consulte as notas da Release antes de migrar os seus próprios dados. Não substitua uma pasta configurada pelo ZIP. Não copie banco ou perfil de outro parceiro. Preserve a lista de não contato e só retome depois de conferir o estado da fila.
+Versão 1.2 ou superior: abra Atualizações, conecte sua própria conta GitHub pelo GitHub CLI oficial e confira a Release disponível. O botão prepara o pacote, faz backup local, pausa, instala e verifica o reinício. Se falhar após a troca, tenta restaurar a versão anterior e o banco. A fila permanece pausada. Leia ATUALIZACOES.txt. Atualizar.cmd oferece recuperação quando o painel não abrir. Instalações 1.1 ou anteriores precisam da primeira migração assistida; não extraia o ZIP por cima de uma instalação em uso.
 
 SUPORTE
 Envie versão da Release, versão do Node, etapa e mensagem de erro, com segredos removidos. Diagnosticar.cmd não imprime chaves ou tokens. Não compartilhe .env, .chrome-profile, banco, logs completos nem screenshots de conversas como se fossem arquivos de suporte genéricos.

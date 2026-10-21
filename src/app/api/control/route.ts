@@ -4,6 +4,7 @@ import { demo, addLead, setStage, optOut, pause, setSetting, event, requestConta
 import { saveBusiness, readiness, env } from '../../../lib/config';
 import { sendBrowserMessage } from '../../../integrations/browser';
 import { verifyDiscoveredLead, queueVerifiedProspects } from '../../../features/discovery';
+import {existsSync} from 'node:fs';
 
 export const runtime = 'nodejs';
 const actionSchema = z.discriminatedUnion('action', [
@@ -28,6 +29,7 @@ export async function POST(request: Request) {
   if (Buffer.byteLength(body,'utf8') > 64000) return NextResponse.json({error:'Dados excedem o limite.'},{status:413});
   try {
     const value = actionSchema.parse(JSON.parse(body));
+    if(existsSync('updates/maintenance.json')&&value.action!=='pause')return NextResponse.json({error:'Atualização em andamento. Aguarde a conclusão antes de alterar a operação.'},{status:423});
     switch (value.action) {
       case 'demo': demo(); break;
       case 'pause': pause('Pausado pelo operador.'); break;

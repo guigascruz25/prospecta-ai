@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { env } from '../../../../lib/config';
 import { validSignature, processWebhook } from '../../../../integrations/instagram';
+import {existsSync} from 'node:fs';
 export const runtime = 'nodejs';
 export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
@@ -8,6 +9,7 @@ export async function GET(request: Request) {
   return new Response('Verificação não autorizada.',{status:403});
 }
 export async function POST(request: Request) {
+  if(existsSync('updates/maintenance.json'))return new Response('Manutenção temporária. Tente novamente.',{status:503});
   const body = await request.text();
   if (Buffer.byteLength(body,'utf8') > 512000) return new Response('Conteúdo excede o limite.',{status:413});
   if (!validSignature(body,request.headers.get('x-hub-signature-256'))) return new Response('Assinatura inválida.',{status:403});

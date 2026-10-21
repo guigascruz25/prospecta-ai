@@ -1,6 +1,6 @@
 # Prospecta AI — parceiros
 
-Versão 1.1.0. Código e pacote local de prospecção com CRM e MCP.
+Versão 1.2.0. Código e pacote local de prospecção com CRM e MCP.
 
 Abra **COMECE-AQUI.html** para as oito aulas, prompts e roteiros. Leia [README-PARCEIROS.txt](README-PARCEIROS.txt) antes de instalar.
 

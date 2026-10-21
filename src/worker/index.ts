@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { mkdirSync } from 'node:fs';
+import { mkdirSync,existsSync } from 'node:fs';
 import { basename } from 'node:path';
 import { env, readiness } from '../lib/config';
 import { sqlite } from '../db';
@@ -36,6 +36,7 @@ async function main() {
   try {
     console.log('Worker local iniciado. Envios reais dependem de configuração explícita.');
     while (!closing) {
+      if(existsSync('updates/maintenance.json')){await new Promise(resolve=>setTimeout(resolve,1000));continue;}
       if (env.APP_MODE === 'live' && env.INSTAGRAM_INBOUND_MODE === 'polling' && readiness().meta && Date.now() >= nextPoll) {
         try { await pollInstagramInbox(); pollFailures = 0; }
         catch {

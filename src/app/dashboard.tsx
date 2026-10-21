@@ -7,13 +7,15 @@ import type { Snapshot } from '../lib/view-model';
 import type { Business } from '../lib/config';
 import type { Lead } from '../db/schema';
 import { CapturePanel } from './capture-panel';
+import {UpdatePanel,UpdateBadge} from './update-panel';
+import release from '../../release.json';
 import { stageLabels, channelLabels, customerStages, affiliateStages } from '../lib/domain';
 
-type View = 'overview' | 'capture' | 'leads' | 'jobs' | 'experiments' | 'integrations' | 'settings';
+type View = 'overview' | 'capture' | 'leads' | 'jobs' | 'experiments' | 'integrations' | 'settings' | 'updates';
 const navigation: {id:View;label:string;icon:string}[] = [
   {id:'overview',label:'Visão geral',icon:'overview'}, {id:'capture',label:'Captação',icon:'people'}, {id:'leads',label:'Leads e conversas',icon:'people'},
   {id:'jobs',label:'Fila e atividade',icon:'activity'}, {id:'experiments',label:'Experimentos',icon:'chart'},
-  {id:'integrations',label:'Integrações',icon:'plug'}, {id:'settings',label:'Meu negócio',icon:'settings'}
+  {id:'integrations',label:'Integrações',icon:'plug'}, {id:'settings',label:'Meu negócio',icon:'settings'}, {id:'updates',label:'Atualizações',icon:'activity'}
 ];
 const currency = (value: number) => new Intl.NumberFormat('pt-BR',{style:'currency',currency:'USD',maximumFractionDigits:4}).format(value);
 const date = (value: string) => value ? new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',timeZone:'America/Sao_Paulo'}).format(new Date(value)) : 'Ainda não recebido';
@@ -33,6 +35,7 @@ export function Dashboard() {
   const [notice,setNotice] = useState('');
   const [busy,setBusy] = useState(false);
   const [adding,setAdding] = useState(false);
+  const [updateAvailable,setUpdateAvailable] = useState(false);
   const refresh = useCallback(async () => {
     try { const response = await fetch('/api/status',{cache:'no-store'}); if (!response.ok) throw new Error('Não foi possível carregar o painel.'); setData(await response.json()); }
     catch (failure) { setError(failure instanceof Error ? failure.message : 'Servidor indisponível.'); }
@@ -61,8 +64,9 @@ export function Dashboard() {
       <div className="brand"><div className="brand-logo"><Image src="/brand/prospecta-ai-horizontal.png" alt={displayName} width={2172} height={724} priority sizes="240px"/></div><Image className="brand-monogram" src="/brand/prospecta-ai-monogram.png" alt={displayName} width={44} height={44} priority/><small>PROSPECÇÃO INTELIGENTE</small></div>
       <div className="workspace-card"><span className="avatar">{data.business.COMPANY_NAME.slice(0,1) || 'G'}</span><div><strong>{data.business.COMPANY_NAME || 'Meu negócio'}</strong><small>{data.business.GEOGRAPHY || 'Configure sua região'}</small></div></div>
       <span className="nav-label">SEU ESPAÇO DE VENDAS</span>
-      <nav>{navigation.map(item => <button key={item.id} aria-label={item.label} title={item.label} className={view===item.id?'nav-item selected':'nav-item'} onClick={() => {window.history.replaceState(null,'','#'+item.id);setView(item.id);setSelected(null);}}><Icon name={item.icon}/><span>{item.label}</span>{item.id==='jobs' && data.exceptions.length>0 && <span className="count">{data.exceptions.length}</span>}</button>)}</nav>
-      <div className="sidebar-bottom"><div className="local-status"><span className={`dot ${workerReady?'green':'gray'}`}/><strong>{workerReady?'Worker conectado':'Worker sem sinal'}</strong></div><p>Seu banco e suas configurações ficam neste computador.</p><span className="version">INSTALAÇÃO LOCAL · v0.1</span></div>
+      <UpdateBadge onAvailable={setUpdateAvailable}/>
+      <nav>{navigation.map(item => <button key={item.id} aria-label={item.label} title={item.label} className={view===item.id?'nav-item selected':'nav-item'} onClick={() => {window.history.replaceState(null,'','#'+item.id);setView(item.id);setSelected(null);}}><Icon name={item.icon}/><span>{item.label}</span>{item.id==='jobs' && data.exceptions.length>0 && <span className="count">{data.exceptions.length}</span>}{item.id==='updates'&&updateAvailable&&<span className="count">Nova</span>}</button>)}</nav>
+      <div className="sidebar-bottom"><div className="local-status"><span className={`dot ${workerReady?'green':'gray'}`}/><strong>{workerReady?'Worker conectado':'Worker sem sinal'}</strong></div><p>Seu banco e suas configurações ficam neste computador.</p><span className="version">INSTALAÇÃO LOCAL · v{release.version}</span></div>
     </aside>
     <main className="main">
       <header className="topbar"><div className="breadcrumb"><strong>{displayName}</strong><span>/</span> {navigation.find(item=>item.id===view)?.label}</div><div className="top-actions"><span className="mode-pill">{data.mode==='simulation'?'MODO DE SIMULAÇÃO':'OPERAÇÃO REAL'}</span><button disabled={busy} className={data.paused?'button small':'button small danger'} onClick={()=>void act({action:data.paused?'resume':'pause'},data.paused?'Fila retomada.':'Fila pausada.')}><span className={`dot ${data.paused?'gray':'green'}`}/>{data.paused?'Retomar fila':'Pausar fila'}</button></div></header>
@@ -79,6 +83,7 @@ export function Dashboard() {
           <section className="cost-panel"><div><span className="eyebrow">CUSTO SOB CONTROLE</span><h2>{currency(data.cost)} <small>/ {currency(data.budget)} por mês</small></h2><p>Estimativa das chamadas de IA. A simulação não gera cobrança.</p></div><div className="cost-details"><div><small>POR LEAD REAL</small><strong>{currency(data.costPerLead)}</strong></div><div><small>POR CLIENTE ATIVO</small><strong>{data.costPerCustomer===null?'Aguardando conversão':currency(data.costPerCustomer)}</strong></div></div></section>
         </>}
         {view==='capture' && <CapturePanel data={data} busy={busy} act={act} onOpenLead={setSelected}/>}
+        {view==='updates'&&<UpdatePanel/>}
         {view==='leads' && <>
           <div className="page-heading"><div><p className="eyebrow">CADA OPORTUNIDADE TEM UMA HISTÓRIA</p><h1>Leads e conversas</h1><p>Acompanhe o estágio, o canal e o próximo passo.</p></div><button className="button primary" onClick={()=>setAdding(true)}>+ Cadastrar lead</button></div>
           <div className="toolbar"><div className="tabs"><button className={funnel==='customer'?'active':''} onClick={()=>setFunnel('customer')}>Clientes</button><button className={funnel==='affiliate'?'active':''} onClick={()=>setFunnel('affiliate')}>Afiliados</button></div><input aria-label="Buscar leads" placeholder="Buscar nome ou @…" value={search} onChange={event=>setSearch(event.target.value)}/><ModeSwitch mode={mode} setMode={setMode}/></div>

@@ -8,7 +8,7 @@ if errorlevel 1 (
  popd
  exit /b 1
 )
-node scripts\partner-service.mjs start
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\open.ps1
 set "PROSPECTA_EXIT=%ERRORLEVEL%"
 if not "%PROSPECTA_EXIT%"=="0" echo A etapa falhou. Leia a mensagem acima antes de continuar.
 pause

@@ -1,0 +1,38 @@
+PROSPECTA AI 1.2 — ATUALIZAÇÕES PELO GITHUB
+
+PRIMEIRA CONEXÃO
+Cada parceiro precisa da própria conta GitHub, convidada para guigascruz25/prospecta-ai. Instale GitHub CLI pelo site oficial https://cli.github.com/ e reinicie o Prospecta AI se ele não localizar o comando.
+No painel, abra Atualizações → Conectar GitHub. Complete o login oficial na janela que abrir e depois clique Verificar atualizações. Nunca distribua a credencial do fornecedor. A autenticação é administrada pelo GitHub CLI, não por um campo de token no painel. O GitHub CLI tenta usar o armazenamento seguro do sistema; se informar que usará arquivo de texto, resolva o armazenamento antes de prosseguir.
+
+ATUALIZAR
+O painel consulta a Release estável mais recente do repositório fixo. Quando houver novidade, mostra versão e notas. Clique Atualizar versão, leia o resumo e confirme Fazer backup e atualizar.
+O atualizador baixa o ZIP da Release exata aprovada e valida o SHA-256 informado pelo GitHub e o manifesto de todos os arquivos. Pacotes com caminhos inválidos, links, dados privados, conteúdo fora do manifesto ou formato incompatível são recusados.
+Dependências e compilação são preparadas em updates/work antes de substituir o aplicativo. Essa etapa pode demorar e precisa de conexão com os registros oficiais de dependências. Computador ligado, espaço em disco e Node.js 24.x são necessários.
+Depois da preparação: pausa a fila, impede alterações durante a manutenção, aguarda tarefas em execução, encerra somente os processos desta pasta, faz backup local do banco/configuração/código e troca os arquivos gerenciados, dependências e compilação. Verifica versão, identidade da instalação, painel e worker.
+Sucesso: a fila permanece pausada. Confira a operação e retome quando desejar. Alterar uma Release não inicia uma atualização sem seu clique.
+
+DADOS PRESERVADOS
+.env, config/business.json, data/, histórico, lista de não contato, pesquisas locais, .chrome-profile e arquivos MCP locais ficam nesta instalação. O banco pode receber migrações da nova versão. O backup anterior permite restaurar código e banco em conjunto se o início falhar.
+Backups em updates/backups contêm dados e credenciais locais: mantenha-os privados. Não envie updates/, banco, .env ou perfil de navegador ao GitHub/suporte. Backups não são apagados automaticamente; reserve espaço em disco.
+Modificações manuais em código gerenciado podem ser substituídas. Sua cópia anterior fica no backup. O atualizador desta edição suporta Windows, banco dentro de data/ e inicialização pelo launcher do pacote. Banco externo, serviço customizado ou migrações incompatíveis exigem atualização assistida.
+
+FALHA E INTERRUPÇÃO
+Se download ou preparação falharem, o código antigo permanece. Se a troca/reinício falhar, a recuperação do código, dependências, compilação e banco anteriores é tentada automaticamente. A fila não é retomada.
+Se houver interrupção de energia ou falha da recuperação, use Recuperar versão anterior na tela Atualizações. Se o painel não abrir, execute Atualizar.cmd na mesma pasta e digite RECUPERAR quando solicitado. Não execute outra instalação sobre a pasta interrompida, não mova o diretório e não apague updates/backups.
+O mecanismo não garante recuperação de disco danificado, backup removido, arquivos bloqueados por outro programa ou processos que não possam ser identificados. Nesses casos, mantenha a operação parada e procure assistência preservando os arquivos.
+
+INSTALAÇÕES 1.1 OU ANTERIORES
+Essas versões não contêm o botão de atualização. Faça a primeira migração com o assistente, preservando e respaldando os dados locais, ou use uma nova pasta limpa para demonstração. Apenas extrair o ZIP por cima de uma instalação em uso não é o procedimento de migração. Depois de instalada a versão 1.2, as próximas Releases compatíveis usam o botão.
+
+PARA GRAVAR
+1. Mostre a versão instalada e a conexão própria do parceiro.
+2. Mostre uma Release de teste publicada, suas notas e o aviso de nova versão.
+3. Clique Atualizar versão e explique a pausa e o backup.
+4. Mostre as etapas, o reinício e a versão final; confira os mesmos leads e configurações.
+5. Mostre Atualizar.cmd para recuperação e explique que a fila fica pausada.
+Não grave login, códigos ou arquivos privados.
+
+FONTES
+https://docs.github.com/en/rest/releases/releases
+https://docs.github.com/en/rest/releases/assets
+https://cli.github.com/manual/gh_auth_login

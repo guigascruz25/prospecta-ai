@@ -12,6 +12,7 @@ GRAVAÇÃO DE TELA
 4. O assistente confere Node/Chrome, executa o diagnóstico e --bootstrap, instala e inicia a cópia local.
 5. Mostre o próprio assistente abrindo o painel e lendo um controle visível; terminal com HTTP 200 não comprova controle de tela.
 6. Confira MCP/worker e simulação pausada. Mostre a retomada depois de uma interação do parceiro, sem repetir todos os passos.
+7. Apresente Atualizações: conexão própria ao GitHub privado, notas da Release, botão com backup e recuperação por Atualizar.cmd. Consulte ATUALIZACOES.txt.
 
 EXERCÍCIO
 Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.
