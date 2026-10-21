@@ -25,13 +25,13 @@ export async function verifyTree(root){const entries=parseManifest(await fs.read
 }
 export function alive(pid){try{if(!Number.isSafeInteger(pid)||pid<1)return false;process.kill(pid,0);return true;}catch{return false;}}
 export function run(command,args,{cwd,timeout=120000,outputFile,maxBytes=2000000,env=process.env}={}){
-  return new Promise((resolve,reject)=>{const child=spawn(command,args,{cwd,env,windowsHide:true,stdio:['ignore','pipe','pipe']});const chunks=[];let size=0,failed=false;let target;
-    const timer=setTimeout(()=>{failed=true;child.kill();reject(new Error('A etapa excedeu o tempo de espera.'));},timeout);
-    const fileReady=outputFile?fs.open(/* turbopackIgnore: true */ outputFile,'wx',0o600).then(f=>target=f):Promise.resolve();let writes=fileReady;
-    child.stdout.on('data',data=>{size+=data.length;if(size>maxBytes){failed=true;child.kill();reject(new Error('Resposta excede o limite permitido.'));return;}if(outputFile)writes=writes.then(()=>target.write(data));else chunks.push(data);});
+  return new Promise((resolve,reject)=>{const child=spawn(command,args,{cwd,env,windowsHide:true,stdio:['ignore','pipe','pipe']});const chunks=[];let size=0,failed=false;
+    function stopChild(){if(process.platform==='win32'&&child.pid){const killer=spawn('taskkill.exe',['/PID',String(child.pid),'/T','/F'],{windowsHide:true,stdio:'ignore'});killer.on('error',()=>child.kill());}else child.kill();}
+    const timer=setTimeout(()=>{failed=true;stopChild();reject(new Error('A etapa excedeu o tempo de espera.'));},timeout);
+    child.stdout.on('data',data=>{if(failed)return;size+=data.length;if(size>maxBytes){failed=true;stopChild();reject(new Error('Resposta excede o limite permitido.'));return;}chunks.push(data);});
     child.stderr.resume(); // gh/npm stderr can contain login URLs. Never forward it to the panel or logs.
     child.on('error',error=>{clearTimeout(timer);failed=true;reject(Object.assign(new Error(error.code==='ENOENT'?'GitHub CLI não encontrado. Instale pelo site oficial.':'Não foi possível executar esta etapa.'),{code:error.code}));});
-    child.on('close',async code=>{clearTimeout(timer);try{await writes;if(target)await target.close();if(!failed){if(code!==0)reject(new Error('Etapa não concluída. Confira acesso ao GitHub, conexão e compatibilidade do pacote.'));else resolve(Buffer.concat(chunks).toString('utf8'));}}catch{reject(new Error('Não foi possível gravar o pacote local.'));}});
+    child.on('close',async code=>{clearTimeout(timer);try{if(!failed){if(code!==0)reject(new Error('Etapa não concluída. Confira acesso ao GitHub, conexão e compatibilidade do pacote.'));else{const bytes=Buffer.concat(chunks);if(outputFile)await fs.writeFile(outputFile,bytes,{flag:'wx',mode:0o600});resolve(outputFile?'':bytes.toString('utf8'));}}}catch{reject(new Error('Não foi possível gravar o pacote local.'));}});
   });
 }
 export async function ghPath(){if(process.platform!=='win32')throw new Error('O atualizador desta edição é para Windows.');const known=[path.join(process.env.ProgramFiles||'C:/Program Files','GitHub CLI','gh.exe'),path.join(process.env.LOCALAPPDATA||'','Programs','GitHub CLI','gh.exe')];for(const file of known)if(await exists(file))return file;try{const lines=String(await run('where.exe',['gh.exe'],{timeout:5000})).trim().split(/\r?\n/);if(lines[0]&&path.isAbsolute(lines[0]))return lines[0];}catch{}throw new Error('Instale o GitHub CLI oficial e reinicie o Prospecta AI.');}
