@@ -3,7 +3,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createHash,randomUUID} from 'node:crypto';
 import {createRequire} from 'node:module';
-import {REPOSITORY,exists,readJson,writeJson,safeChild,managed,parseManifest,verifyTree,noLinks,run,ghPath,ghJson,releaseInfo,alive} from './partner-update-lib.mjs';
+import {REPOSITORY,exists,readJson,writeJson,safeChild,managed,parseManifest,verifyTree,noLinks,run,ghPath,ghJson,releaseInfo,alive,launchIndependent} from './partner-update-lib.mjs';
 
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 export async function readEnvironment(root){const text=await fs.readFile(path.join(root,'.env'),'utf8');return Object.fromEntries(text.split(/\r?\n/).map(l=>l.match(/^([A-Z_]+)=(.*)$/)).filter(Boolean).map(([,k,v])=>[k,v.trim().replace(/^['"]|['"]$/g,'')]));}
@@ -42,7 +42,7 @@ export async function executeUpdate(root,ticket,action,tag,deps={}){
     if(!command?.toLowerCase().includes(path.join(root,'node_modules','next','dist','bin','next').toLowerCase()))throw new Error('O processo não pertence ao painel desta pasta.');
     process.kill(web,'SIGTERM');for(let i=0;i<100;i++){if(![processes.launcher,...processes.children].some(alive))return;await delay(200);}throw new Error('Os processos ainda não encerraram. Nenhuma troca de arquivos foi feita.');
   }
-  async function startAndCheck(){if(deps.start)return deps.start();const startedAt=Date.now();await run(process.execPath,[path.join(root,'scripts/partner-service.mjs'),'start'],{cwd:root,timeout:15000});for(let i=0;i<60;i++){try{const s=await status();if(s.workerOnline&&s.paused===true&&Date.parse(s.heartbeat)>startedAt)return s;}catch{}await delay(1000);}throw new Error('A versão não confirmou painel e um novo sinal do worker pausado.');}
+  async function startAndCheck(){if(deps.start)return deps.start();const startedAt=Date.now();await launchIndependent(root);for(let i=0;i<60;i++){try{const s=await status();if(s.workerOnline&&s.paused===true&&Date.parse(s.heartbeat)>startedAt)return s;}catch{}await delay(1000);}throw new Error('A versão não confirmou painel e um novo sinal do worker pausado.');}
   async function rollback(){
     await phase('rolling_back','Restaurando a versão e o banco anteriores.');const backup=safeChild(root,state.backupRelative);await stopOwned();await restoreCode(root,backup);
     for(const name of ['node_modules','.next']){const saved=path.join(backup,'runtime',name);if(await exists(saved)){if(await exists(path.join(root,name)))await fs.rename(path.join(root,name),path.join(backup,`failed-${name}-${Date.now()}`));await fs.rename(saved,path.join(root,name));}}

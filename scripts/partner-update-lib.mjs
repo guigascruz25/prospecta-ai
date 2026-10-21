@@ -66,3 +66,12 @@ export async function dispatchUpdate(root,action,tag,templateRoot=path.join(root
 }
 export async function openGithubLogin(){const gh=await ghPath();const command=`& '${gh.replaceAll("'","''")}' auth login --hostname github.com --git-protocol https --web`;
   const encoded=Buffer.from(command,'utf16le').toString('base64');const child=spawn('powershell.exe',['-NoProfile','-NoExit','-EncodedCommand',encoded],{detached:true,windowsHide:false,stdio:'ignore'});await new Promise((resolve,reject)=>{child.once('spawn',resolve);child.once('error',reject);});child.unref();return {ok:true};}
+export async function launchIndependent(root){
+  const launcher=path.join(root,'updates','launch-independent.mjs');await fs.mkdir(path.dirname(launcher),{recursive:true});
+  await fs.writeFile(launcher,`import {spawn} from 'node:child_process';import fs from 'node:fs/promises';import path from 'node:path';const root=${JSON.stringify(root)};const out=await fs.open(path.join(root,'logs/app.log'),'a');const err=await fs.open(path.join(root,'logs/app-error.log'),'a');const child=spawn(process.execPath,[path.join(root,'scripts/run.mjs'),'start'],{cwd:root,detached:true,windowsHide:true,stdio:['ignore',out.fd,err.fd]});await new Promise((resolve,reject)=>{child.once('spawn',resolve);child.once('error',reject);});child.unref();await fs.writeFile(path.join(root,'logs/launcher.pid'),String(child.pid));await out.close();await err.close();`);
+  // WMI starts the daemon outside the retiring updater's Windows job, with no console.
+  const quote=s=>"'"+s.replaceAll("'","''")+"'";const command=`"${process.execPath}" "${launcher}"`;
+  const script=`$ErrorActionPreference='Stop'; $startup=New-CimInstance -ClassName Win32_ProcessStartup -ClientOnly -Property @{ShowWindow=[uint16]0;CreateFlags=[uint32]16777224}; Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{CommandLine=${quote(command)};CurrentDirectory=${quote(root)};ProcessStartupInformation=$startup} | Select-Object ReturnValue,ProcessId | ConvertTo-Json`;
+  const result=JSON.parse(String(await run('powershell.exe',['-NoProfile','-EncodedCommand',Buffer.from(script,'utf16le').toString('base64')],{cwd:root,timeout:15000})));
+  if(result.ReturnValue!==0)throw new Error('O Windows impediu o reinício independente. Inicie pelo atalho após recuperar.');
+}
