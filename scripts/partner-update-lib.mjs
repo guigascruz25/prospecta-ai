@@ -2,7 +2,6 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {spawn} from 'node:child_process';
 import {createHash,randomUUID} from 'node:crypto';
-import {fileURLToPath} from 'node:url';
 
 export const REPOSITORY='guigascruz25/prospecta-ai';
 export const ACTIVE=['requested','downloading','validating','preparing','waiting','backup','installing','restarting','rolling_back'];
@@ -55,10 +54,10 @@ export async function updateView(root){const [release,check,state,lock]=await Pr
 export async function claimUpdate(root){const directory=path.join(root,'updates');await fs.mkdir(directory,{recursive:true});const file=path.join(directory,'lock.json');const previous=await readJson(file);if(previous&&alive(previous.pid))throw new Error('Já existe uma atualização em andamento.');
   if(previous)await fs.unlink(file);const ticket=randomUUID();await fs.writeFile(file,JSON.stringify({ticket,pid:process.pid}),{flag:'wx',mode:0o600});return ticket;
 }
-export async function dispatchUpdate(root,action,tag){const view=await updateView(root);if(action==='install'&&view.maintenance)throw new Error('Recupere a atualização anterior antes de tentar outra.');if(action==='recover'&&!view.recoverable)throw new Error('Nenhuma recuperação pendente.');
+export async function dispatchUpdate(root,action,tag,templateRoot=path.join(root,'scripts')){const view=await updateView(root);if(action==='install'&&view.maintenance)throw new Error('Recupere a atualização anterior antes de tentar outra.');if(action==='recover'&&!view.recoverable)throw new Error('Nenhuma recuperação pendente.');
   if(action==='install'&&(!view.check?.connected||view.check.tag!==tag||!view.check.available))throw new Error('Confira novamente a versão disponível antes de atualizar.');
   const ticket=await claimUpdate(root);let log;
-  try{const helper=path.join(root,'updates','helper-'+ticket);await fs.mkdir(helper);const template=action==='recover'?fileURLToPath(new URL('./',import.meta.url)):path.join(root,'scripts');for(const name of ['partner-update-lib.mjs','partner-update.mjs','partner-update-extract.ps1','partner-update-console.mjs'])await fs.copyFile(path.join(template,name),path.join(helper,name));
+  try{const helper=path.join(root,'updates','helper-'+ticket);await fs.mkdir(helper);for(const name of ['partner-update-lib.mjs','partner-update.mjs','partner-update-extract.ps1','partner-update-console.mjs'])await fs.copyFile(/* turbopackIgnore: true */ path.join(templateRoot,name),path.join(helper,name));
     await fs.writeFile(path.join(root,'updates','Recuperar.cmd'),`@echo off\r\nchcp 65001 >nul\r\npushd "%~dp0.."\r\nnode "%~dp0helper-${ticket}\\partner-update-console.mjs" "%CD%"\r\npause\r\npopd\r\n`);
     const previous=await readJson(path.join(root,'updates/state.json'));await writeJson(path.join(root,'updates/state.json'),{...(action==='recover'?previous:{}),phase:'requested',message:action==='recover'?'Recuperação solicitada.':'Preparando download da versão aprovada.',version:action==='recover'?previous?.version:tag?.slice(1),updatedAt:new Date().toISOString()});
     log=await fs.open(path.join(root,'logs/update.log'),'a',0o600);const child=spawn(process.execPath,[path.join(helper,'partner-update.mjs'),root,ticket,action,...(tag?[tag]:[])],{cwd:root,detached:true,windowsHide:true,stdio:['ignore',log.fd,log.fd]});

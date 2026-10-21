@@ -1,4 +1,4 @@
-PROSPECTA AI — EDIÇÃO PARCEIROS 1.2.0
+PROSPECTA AI — EDIÇÃO PARCEIROS 1.2.1
 
 COMECE AQUI
 1. Baixe o ZIP da Release e extraia a pasta Prospecta-AI. Não execute dentro do ZIP.

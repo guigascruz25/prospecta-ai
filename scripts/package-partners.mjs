@@ -4,7 +4,7 @@ import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 const source=fileURLToPath(new URL('../',import.meta.url));
-const version='1.2.0';
+const version=JSON.parse(await fs.readFile(path.join(source,'release.json'),'utf8')).version;
 const output=path.join(source,'outputs','releases',`v${version}-${new Date().toISOString().replace(/[:.]/g,'-')}`);
 const stage=path.join(output,'Prospecta-AI');
 let originBusiness={};try{originBusiness=JSON.parse(await fs.readFile(path.join(source,'config/business.json'),'utf8'));}catch{/* Fresh source checkout. */}
