@@ -1,17 +1,18 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {createHash} from 'node:crypto';
+import {createHash,randomUUID} from 'node:crypto';
 import {createRequire} from 'node:module';
 import {REPOSITORY,exists,readJson,writeJson,safeChild,managed,parseManifest,verifyTree,noLinks,run,ghPath,ghJson,releaseInfo,alive} from './partner-update-lib.mjs';
 
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 export async function readEnvironment(root){const text=await fs.readFile(path.join(root,'.env'),'utf8');return Object.fromEntries(text.split(/\r?\n/).map(l=>l.match(/^([A-Z_]+)=(.*)$/)).filter(Boolean).map(([,k,v])=>[k,v.trim().replace(/^['"]|['"]$/g,'')]));}
 export function rootId(root){return createHash('sha256').update(path.resolve(root).replaceAll('\\','/').toLowerCase()).digest('hex').slice(0,20);}
+async function atomicCopy(source,target){const temp=target+'.update-'+randomUUID();try{await fs.copyFile(source,temp);await fs.rename(temp,target);}finally{await fs.unlink(temp).catch(()=>{});}}
 export async function snapshotFiles(root,backup,names){const files=[];for(const name of names){if(name!=='SHA256SUMS.txt'&&!managed(name))throw new Error('Arquivo não gerenciado.');await noLinks(root,name);const target=safeChild(root,name),present=await exists(target);files.push({name,present});if(present){const dest=safeChild(path.join(backup,'code'),name);await fs.mkdir(path.dirname(dest),{recursive:true});await fs.copyFile(target,dest);}}
   await writeJson(path.join(backup,'files.json'),files);return files;}
-export async function replaceManaged(root,stage,files,incoming){const fresh=new Set(incoming.map(e=>e.name).concat('SHA256SUMS.txt'));for(const file of files){await noLinks(root,file.name);const target=safeChild(root,file.name);if(fresh.has(file.name)){await fs.mkdir(path.dirname(target),{recursive:true});await fs.copyFile(safeChild(stage,file.name),target);}else if(file.present)await fs.unlink(target);}}
-export async function restoreCode(root,backup){const files=await readJson(path.join(backup,'files.json'));if(!Array.isArray(files))throw new Error('Backup de código não encontrado.');for(const file of files){if(file.name!=='SHA256SUMS.txt'&&!managed(file.name))throw new Error('Backup inválido.');await noLinks(root,file.name);const target=safeChild(root,file.name);if(file.present){await fs.mkdir(path.dirname(target),{recursive:true});await fs.copyFile(safeChild(path.join(backup,'code'),file.name),target);}else await fs.unlink(target).catch(error=>{if(error.code!=='ENOENT')throw error;});}}
+export async function replaceManaged(root,stage,files,incoming){const fresh=new Set(incoming.map(e=>e.name).concat('SHA256SUMS.txt'));for(const file of files){await noLinks(root,file.name);const target=safeChild(root,file.name);if(fresh.has(file.name)){await fs.mkdir(path.dirname(target),{recursive:true});await atomicCopy(safeChild(stage,file.name),target);}else if(file.present)await fs.unlink(target);}}
+export async function restoreCode(root,backup){const files=await readJson(path.join(backup,'files.json'));if(!Array.isArray(files))throw new Error('Backup de código não encontrado.');for(const file of files){if(file.name!=='SHA256SUMS.txt'&&!managed(file.name))throw new Error('Backup inválido.');await noLinks(root,file.name);const target=safeChild(root,file.name);if(file.present){await fs.mkdir(path.dirname(target),{recursive:true});await atomicCopy(safeChild(path.join(backup,'code'),file.name),target);}else await fs.unlink(target).catch(error=>{if(error.code!=='ENOENT')throw error;});}}
 // pnpm uses absolute directory junctions on Windows. Rebase them after staging moves.
 export async function relocateRuntime(directory,from,to){
   for(const item of await fs.readdir(directory,{withFileTypes:true})){
@@ -30,7 +31,8 @@ export async function executeUpdate(root,ticket,action,tag,deps={}){
   const environment=await readEnvironment(root);const port=Number(environment.APP_PORT||3100);if(!Number.isInteger(port)||port<1||port>65535)throw new Error('Porta inválida.');const origin=`http://127.0.0.1:${port}`;
   const id=rootId(root);const databaseRelative=(environment.DATABASE_URL||'data/app.db').replace(/^file:/,'');if(!databaseRelative.startsWith('data/'))throw new Error('Atualização automática exige banco dentro de data/ desta instalação.');const database=safeChild(root,databaseRelative);
   await noLinks(root,databaseRelative);
-  const require=createRequire(path.join(root,'package.json'));const Database=require('better-sqlite3');
+  const require=createRequire(path.join(root,'package.json'));
+  function openDatabase(options={}){const Database=require('better-sqlite3');return new Database(database,options);}
   async function status(){if(deps.status)return deps.status();const response=await fetch(`${origin}/api/status`,{signal:AbortSignal.timeout(5000)});if(!response.ok)throw new Error('Painel indisponível.');const s=await response.json();if(s.installationId!==id)throw new Error('A porta pertence a outra instalação.');return s;}
   async function stopOwned(){
     if(deps.stop)return deps.stop();
@@ -47,7 +49,7 @@ export async function executeUpdate(root,ticket,action,tag,deps={}){
     // The database was backed up after all processes stopped. Preserve the failed database for diagnosis.
     if(await exists(path.join(backup,'database.db'))){for(const suffix of ['','-wal','-shm'])if(await exists(database+suffix))await fs.rename(database+suffix,path.join(backup,`failed-database-${Date.now()}${suffix||'.db'}`));await fs.copyFile(path.join(backup,'database.db'),database);}
     for(const [name,file] of [['.env','environment.local'],['config/business.json','business.local.json']])if(await exists(path.join(backup,file)))await fs.copyFile(path.join(backup,file),safeChild(root,name));
-    const db=new Database(database);try{db.prepare("INSERT INTO settings VALUES ('paused','true') ON CONFLICT(key) DO UPDATE SET value='true'").run();db.prepare("UPDATE settings SET value='' WHERE key IN ('worker_lease','worker_heartbeat')").run();}finally{db.close();}
+    const db=openDatabase();try{db.prepare("INSERT INTO settings VALUES ('paused','true') ON CONFLICT(key) DO UPDATE SET value='true'").run();db.prepare("UPDATE settings SET value='' WHERE key IN ('worker_lease','worker_heartbeat')").run();}finally{db.close();}
     await startAndCheck();await fs.unlink(path.join(root,'updates/maintenance.json')).catch(()=>{});await phase('rolled_back','Versão anterior restaurada. A fila permanece pausada.',{backupReady:false});
   }
   let changed=false;
@@ -63,9 +65,9 @@ export async function executeUpdate(root,ticket,action,tag,deps={}){
     const existing=await exists(path.join(root,'SHA256SUMS.txt'))?parseManifest(await fs.readFile(path.join(root,'SHA256SUMS.txt'),'utf8')):[];const names=[...new Set([...incoming,...existing].map(e=>e.name).concat('SHA256SUMS.txt'))];for(const name of names)await noLinks(root,name);
     await status();await writeJson(path.join(root,'updates/maintenance.json'),{ticket,createdAt:new Date().toISOString()});
     await phase('waiting','Pausando a fila e aguardando as tarefas em andamento terminarem.');if(deps.pause)await deps.pause();else{const pause=await fetch(`${origin}/api/control`,{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify({action:'pause'}),signal:AbortSignal.timeout(10000)});if(!pause.ok)throw new Error('Não foi possível pausar a operação.');}
-    let idle=false;for(let i=0;i<120;i++){const s=await status();const db=new Database(database,{readonly:true});let processing;try{processing=db.prepare("SELECT (SELECT COUNT(*) FROM jobs WHERE status='processing') + (SELECT COUNT(*) FROM discovery_runs WHERE status='processing') AS n").get().n;}finally{db.close();}if(s.paused&&processing===0){idle=true;break;}await delay(1000);}if(!idle)throw new Error('Ainda há tarefa em andamento. Aguarde e tente atualizar novamente.');
+    let idle=false;for(let i=0;i<120;i++){const s=await status();const db=openDatabase({readonly:true});let processing;try{processing=db.prepare("SELECT (SELECT COUNT(*) FROM jobs WHERE status='processing') + (SELECT COUNT(*) FROM discovery_runs WHERE status='processing') AS n").get().n;}finally{db.close();}if(s.paused&&processing===0){idle=true;break;}await delay(1000);}if(!idle)throw new Error('Ainda há tarefa em andamento. Aguarde e tente atualizar novamente.');
     await stopOwned();await phase('backup','Criando backup local do banco, configurações e código.');const backupRelative=`updates/backups/${ticket}`;const backup=safeChild(root,backupRelative);await fs.mkdir(path.join(backup,'runtime'),{recursive:true});
-    const db=new Database(database);try{if(db.prepare("SELECT value FROM settings WHERE key='paused'").get()?.value!=='true')throw new Error('A fila precisa estar pausada.');await db.backup(path.join(backup,'database.db'));}finally{db.close();}
+    const db=openDatabase();try{if(db.prepare("SELECT value FROM settings WHERE key='paused'").get()?.value!=='true')throw new Error('A fila precisa estar pausada.');await db.backup(path.join(backup,'database.db'));}finally{db.close();}
     await fs.copyFile(path.join(root,'.env'),path.join(backup,'environment.local'));if(await exists(path.join(root,'config/business.json')))await fs.copyFile(path.join(root,'config/business.json'),path.join(backup,'business.local.json'));
     const files=await snapshotFiles(root,backup,names);await phase('installing','Aplicando a nova versão. O painel será reiniciado.',{backupRelative,backupReady:true});changed=true;
     for(const name of ['node_modules','.next']){await fs.rename(path.join(root,name),path.join(backup,'runtime',name));await fs.rename(path.join(stage,name),path.join(root,name));}

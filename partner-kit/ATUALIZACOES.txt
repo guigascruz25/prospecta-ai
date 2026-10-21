@@ -18,7 +18,7 @@ Modificações manuais em código gerenciado podem ser substituídas. Sua cópia
 
 FALHA E INTERRUPÇÃO
 Se download ou preparação falharem, o código antigo permanece. Se a troca/reinício falhar, a recuperação do código, dependências, compilação e banco anteriores é tentada automaticamente. A fila não é retomada.
-Se houver interrupção de energia ou falha da recuperação, use Recuperar versão anterior na tela Atualizações. Se o painel não abrir, execute Atualizar.cmd na mesma pasta e digite RECUPERAR quando solicitado. Não execute outra instalação sobre a pasta interrompida, não mova o diretório e não apague updates/backups.
+Se houver interrupção de energia ou falha da recuperação, use Recuperar versão anterior na tela Atualizações. Se o painel não abrir, execute Atualizar.cmd na mesma pasta e digite RECUPERAR quando solicitado. Se os scripts principais estiverem indisponíveis, execute updates/Recuperar.cmd: esse comando usa a cópia estável do atualizador criada antes da troca. Não execute outra instalação sobre a pasta interrompida, não mova o diretório e não apague updates/backups.
 O mecanismo não garante recuperação de disco danificado, backup removido, arquivos bloqueados por outro programa ou processos que não possam ser identificados. Nesses casos, mantenha a operação parada e procure assistência preservando os arquivos.
 
 INSTALAÇÕES 1.1 OU ANTERIORES
