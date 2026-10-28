@@ -5,6 +5,7 @@ import { env, getBusiness } from '../lib/config';
 import { sqlite } from '../db';
 import { type Lead } from '../db/schema';
 import { reserveBudget } from '../features/budget';
+import {structuredModelOptions} from '../lib/openai-model-options';
 
 export const decisionSchema = z.object({
   intent: z.enum(['interested','asked_info','asked_pricing','wants_whatsapp','not_the_owner','will_forward','objection','not_interested','opt_out','ambiguous','needs_human']),
@@ -48,7 +49,7 @@ export async function decide(lead: Lead): Promise<Decision> {
   const inputUpperBound = Buffer.byteLength(context + instructions, 'utf8') + 500;
   const id = reserveBudget(lead.id,env.OPENAI_MODEL_FAST,inputUpperBound,1000);
   const client = new OpenAI({ apiKey: env.OPENAI_API_KEY, maxRetries: 0, timeout: 30000 });
-  const response = await client.responses.parse({ model: env.OPENAI_MODEL_FAST, instructions, input: context, max_output_tokens: 1000, store: false, text: { format: zodTextFormat(commercialDecisionSchema,'commercial_decision') } });
+  const response = await client.responses.parse({ model: env.OPENAI_MODEL_FAST,...structuredModelOptions(env.OPENAI_MODEL_FAST), instructions, input: context, max_output_tokens: 1000, store: false, text: { format: zodTextFormat(commercialDecisionSchema,'commercial_decision') } });
   const inputTokens = response.usage?.input_tokens || inputUpperBound;
   const outputTokens = response.usage?.output_tokens || 1000;
   sqlite.prepare('UPDATE ai_calls SET input_tokens=?,output_tokens=?,estimated_cost=? WHERE id=?').run(inputTokens,outputTokens,(inputTokens * env.OPENAI_INPUT_USD_PER_MILLION + outputTokens * env.OPENAI_OUTPUT_USD_PER_MILLION)/1000000,id);

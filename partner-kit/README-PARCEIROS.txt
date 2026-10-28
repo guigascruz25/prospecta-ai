@@ -70,7 +70,9 @@ Preços atuais: https://developers.openai.com/api/docs/pricing
 Meta: https://developers.facebook.com/docs/instagram-platform/instagram-api-with-instagram-login/
 Consulte os fluxos e preços atuais na hora de configurar; disponibilidade depende das contas e permissões do parceiro.
 
-INTEGRAÇÕES PELO PAINEL — 1.3.0
+INTEGRAÇÕES PELO PAINEL — 1.3.1
 Abra Integrações para inserir manualmente chave/modelos/preços da OpenAI, credenciais/IDs da Meta e endereço CDP do Chrome. As credenciais salvas ficam ocultas; campo de segredo vazio mantém o valor existente e a opção Apagar remove o valor escolhido. As alterações são usadas nas próximas ações sem reiniciar o sistema, sem retomar a fila.
 Para enviar dados ao Vendus ou a outra plataforma, configure um receptor HTTPS público que aceite JSON por POST. Informe URL, nome e, se necessário, nome/valor do cabeçalho de autenticação. Confirme as automações do destino antes de habilitar. Faça a prévia, envie um teste fictício quando desejar e confira no destino. O envio de lead real exige selecionar e visualizar a prévia antes de clicar em Enviar lead selecionado. HTTP aceito não comprova a criação do cadastro no CRM.
 A opção automática vale apenas para novas empresas encontradas pela captação depois de habilitada e respeita a pausa da fila. O JSON contém contexto/fontes disponíveis; dados desconhecidos ficam vazios e não há faturamento inferido. Uma tentativa rejeitada ou incerta não é repetida automaticamente. Recebimento de mensagens do Instagram via webhook Meta continua independente desta saída para CRMs.
+
+Na versão 1.3.1, clique no cartão da integração para abrir os campos; somente um cartão fica aberto por vez. Custos, autenticação adicional, testes e histórico têm áreas expansíveis. Em OpenAI, escolha pela lista ou use a recomendação para preencher os modelos e os preços de referência; as configurações existentes só são substituídas ao salvar. A pesquisa usa o modelo de pesquisa, e as conversas usam o modelo de respostas. A disponibilidade depende da sua conta OpenAI e não é validada pelo preenchimento do formulário.
