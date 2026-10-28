@@ -8,6 +8,7 @@ import { inspectBusinessProfile } from '../integrations/browser';
 import { geocodeAddress } from '../integrations/geocoding';
 import { findWebsiteAddress } from '../integrations/public-website';
 import { rampedDailyLimit } from '../lib/send-policy';
+import {queueAutomaticWebhook} from './outbound-webhook';
 
 export const captureSegments=['lojas de roupas e calçados','clínicas odontológicas e de estética','imobiliárias','lojas de móveis e decoração','oficinas e lojas de autopeças','academias','lojas de materiais de construção','pet shops e clínicas veterinárias'];
 export const captureEnabled=()=>setting('capture_enabled')?setting('capture_enabled')==='true':env.CAPTURE_ENABLED==='true';
@@ -73,6 +74,7 @@ export async function importCandidates(runId:string,batch:SearchBatch,inspect=in
       sqlite.prepare('UPDATE lead_sources SET verification_note=? WHERE lead_id=?').run('Não foi possível conferir o perfil no Chrome. Refaça a conferência antes de abordar.',lead.id);
       patchLead(lead.id,{nextAction:'Conferência do perfil pendente; abordagem bloqueada'});
     }
+    queueAutomaticWebhook(lead.id);
   }
   sqlite.prepare('UPDATE discovery_runs SET rejection_notes=? WHERE id=?').run(JSON.stringify(rejected),runId);
   return added;

@@ -1,5 +1,5 @@
 Prospecta AI — da instalação à primeira reunião
-Edição parceiros · Windows · versão 1.2 · 21/10/2026
+Materiais para gravação · Windows · sistema 1.2.2 · revisão 23/10/2026
 
 O parceiro abre a pasta e cola o prompt mestre. O assistente instala, abre as páginas, reutiliza ou cria os recursos autorizados e configura as integrações. O parceiro fornece dados, senhas/códigos e aprovações. A sessão precisa de execução local e controle de navegador; o procedimento verifica isso antes de prometer execução visual.
 
@@ -19,8 +19,9 @@ GRAVAÇÃO DE TELA
 3. Mostre o assistente verificando ferramentas e conduzindo a conexão oficial do navegador se faltar; o parceiro aprova o acesso.
 4. O assistente confere Node/Chrome, executa o diagnóstico e --bootstrap, instala e inicia a cópia local.
 5. Mostre o próprio assistente abrindo o painel e lendo um controle visível; terminal com HTTP 200 não comprova controle de tela.
-6. Confira MCP/worker e simulação pausada. Mostre a retomada depois de uma interação do parceiro, sem repetir todos os passos.
-7. Apresente Atualizações: conexão própria ao GitHub privado, notas da Release, botão com backup e recuperação por Atualizar.cmd. Consulte ATUALIZACOES.txt.
+6. Mostre a criação do atalho com ícone na Área de Trabalho e no menu Iniciar. Confira o destino e clique para comprovar que abre esta instalação, sem substituir o atalho de outra cópia.
+7. Confira MCP/worker e simulação pausada. Mostre a retomada depois de uma interação do parceiro, sem repetir todos os passos.
+8. Apresente Atualizações: conexão própria ao GitHub privado, notas da Release, botão com backup e recuperação por Atualizar.cmd. Consulte ATUALIZACOES.txt.
 
 EXERCÍCIO
 Cole o prompt desta aula no assistente e confira o resultado antes de passar à próxima etapa.

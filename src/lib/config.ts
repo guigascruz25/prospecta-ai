@@ -1,4 +1,4 @@
-import { config as loadEnv } from 'dotenv';
+import { config as loadEnv, parse as parseEnv } from 'dotenv';
 import { readFileSync, writeFileSync, renameSync, mkdirSync } from 'node:fs';
 import { dirname,join,basename } from 'node:path';
 import { z } from 'zod';
@@ -36,7 +36,7 @@ export function saveBusiness(value: unknown) {
   renameSync(`${target}.tmp`, target);
   return validated;
 }
-const envSchema = z.object({
+export const envSchema = z.object({
   DATABASE_URL: z.string().default('data/app.db'),
   APP_MODE: z.enum(['simulation', 'live']).default('simulation'),
   ALLOW_LIVE_SENDS: z.enum(['true', 'false']).default('false'),
@@ -62,9 +62,22 @@ const envSchema = z.object({
   CAPTURE_INTERVAL_HOURS: z.coerce.number().min(1).max(168).default(6),
   CAPTURE_BATCH_SIZE: z.coerce.number().int().min(1).max(15).default(8),
   CAPTURE_MAX_NEW_LEADS_PER_DAY: z.coerce.number().int().min(1).max(100).default(20),
-  OPENAI_WEB_SEARCH_USD_PER_CALL: z.coerce.number().positive().default(0.01)
+  OPENAI_WEB_SEARCH_USD_PER_CALL: z.coerce.number().positive().default(0.01),
+  OUTBOUND_WEBHOOK_URL: z.string().default(''),
+  OUTBOUND_WEBHOOK_LABEL: z.string().max(100).default('CRM externo'),
+  OUTBOUND_WEBHOOK_HEADER_NAME: z.string().default('Authorization'),
+  OUTBOUND_WEBHOOK_HEADER_VALUE: z.string().default(''),
+  OUTBOUND_WEBHOOK_ENABLED: z.enum(['true','false']).default('false'),
+  OUTBOUND_WEBHOOK_AUTO_EXPORT: z.enum(['true','false']).default('false'),
+  OUTBOUND_WEBHOOK_RESEARCH_ONLY_CONFIRMED: z.enum(['true','false']).default('false')
 });
 export const env = envSchema.parse(process.env);
+export const integrationKeys = ['OPENAI_API_KEY','OPENAI_MODEL','OPENAI_MODEL_FAST','OPENAI_MONTHLY_BUDGET_USD','OPENAI_INPUT_USD_PER_MILLION','OPENAI_OUTPUT_USD_PER_MILLION','OPENAI_WEB_SEARCH_USD_PER_CALL','CHROME_CDP_URL','INSTAGRAM_APP_SECRET','INSTAGRAM_PAGE_ACCESS_TOKEN','INSTAGRAM_WEBHOOK_VERIFY_TOKEN','INSTAGRAM_BUSINESS_ACCOUNT_ID','INSTAGRAM_GRAPH_VERSION','INSTAGRAM_SCOPED_ACCOUNT_ID','INSTAGRAM_INBOUND_MODE','INSTAGRAM_POLL_INTERVAL_SECONDS','OUTBOUND_WEBHOOK_URL','OUTBOUND_WEBHOOK_LABEL','OUTBOUND_WEBHOOK_HEADER_NAME','OUTBOUND_WEBHOOK_HEADER_VALUE','OUTBOUND_WEBHOOK_ENABLED','OUTBOUND_WEBHOOK_AUTO_EXPORT','OUTBOUND_WEBHOOK_RESEARCH_ONLY_CONFIRMED'] as const;
+export function reloadIntegrationEnv() {
+  const disk=parseEnv(readFileSync(join(process.cwd(),'.env')));
+  const next=envSchema.parse({...env,...Object.fromEntries(integrationKeys.filter(key=>disk[key]!==undefined).map(key=>[key,disk[key]]))});
+  Object.assign(env,next);
+}
 if (env.MAX_SECONDS_BETWEEN_DMS < env.MIN_SECONDS_BETWEEN_DMS) throw new Error('Intervalo máximo inferior ao mínimo.');
 new Intl.DateTimeFormat('pt-BR', { timeZone: env.OPERATING_TIMEZONE });
 export function readiness() {

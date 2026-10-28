@@ -1,7 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import { mkdirSync,existsSync } from 'node:fs';
 import { basename } from 'node:path';
-import { env, readiness } from '../lib/config';
+import { env, readiness, reloadIntegrationEnv } from '../lib/config';
+import {processAutomaticWebhooks,recoverOutboundWebhooks} from '../features/outbound-webhook';
 import { sqlite } from '../db';
 import { setting, setSetting, exception, pause, event } from '../features/crm';
 import { tick, recoverJobs, optimize } from './engine';
@@ -25,6 +26,7 @@ async function main() {
   if (!lease()) throw new Error('Já existe um worker ativo.');
   recoverJobs();
   recoverCapture();
+  recoverOutboundWebhooks();
   const renew = setInterval(() => { if (!lease()) process.exit(1); setSetting('worker_heartbeat',new Date().toISOString()); },10000);
   let closing = false;
   process.on('SIGTERM',() => { closing = true; });
@@ -37,6 +39,7 @@ async function main() {
     console.log('Worker local iniciado. Envios reais dependem de configuração explícita.');
     while (!closing) {
       if(existsSync('updates/maintenance.json')){await new Promise(resolve=>setTimeout(resolve,1000));continue;}
+      try {reloadIntegrationEnv();} catch {pause('Configuração de integração inválida. Confira os campos antes de retomar.');await new Promise(resolve=>setTimeout(resolve,1000));continue;}
       if (env.APP_MODE === 'live' && env.INSTAGRAM_INBOUND_MODE === 'polling' && readiness().meta && Date.now() >= nextPoll) {
         try { await pollInstagramInbox(); pollFailures = 0; }
         catch {
@@ -58,6 +61,7 @@ async function main() {
       }
       if(setting('paused')==='false') scheduleUnansweredLeads();
       await tick();
+      if(setting('paused')==='false')await processAutomaticWebhooks();
       if (Date.now()-lastBackup > 86400000) {
         mkdirSync('backups',{recursive:true});
         const databaseName = basename(env.DATABASE_URL.replace(/^file:/,'')).replace(/[^a-zA-Z0-9_-]/g,'_');
